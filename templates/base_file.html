@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <title>{% block title %}{% end %}</title>
+        <!-- ico -->
+        <link rel="shortcut icon" href="{{ static_url('favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ static_url('favicon.ico') }}" type="image/x-icon">
+        <!-- Style -->
+        <link rel="stylesheet" href="{{ static_url('css/cichar_css.css') }}">
+        <!-- font-awesome-->
+        <link rel="stylesheet" href="{{ static_url('css/font-awesome.min.css') }}">
+        <!-- jQuery -->
+        <script src="{{ static_url('js/jQuery/jquery.min.js') }}"></script>
+        <!-- Pace -->
+        <script src="{{ static_url('other/pace/pace.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ static_url('other/pace/pace_flash.css') }}">
+        <!-- iziToast -->
+        <link rel="stylesheet" href="{{ static_url('iziToast/iziToast.min.css') }}">
+        <script src="{{ static_url('iziToast/iziToast.min.js') }}"></script>
+        <script src="{{ static_url('js/project/notify_info.js') }}"></script>
+        {% block header-script %}
+        {% end %}
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- 头部导航栏 -->
+            <div id="header">
+                {% module Template("modules/header.html") %}
+            </div>
+            <!-- /.头部导航栏 -->
+
+            <div class="clearfix" id="content">
+                {% block header-container %}
+                {% end %}
+                {% block container %}
+                {% end %}
+            </div>
+
+            {% block others %}
+            {% end %}
+
+            <!-- 页脚 -->
+            <footer id="footer">
+                {% module Template("modules/footer.html") %}
+            </footer>
+            <!-- /.页脚 -->
+
+            <!-- js -->
+            <script src="{{ static_url('js/project/cichar_js.js') }}"></script>
+            {% block extra_scripts %}
+            {% end %}
+        </div>
+    </body>
+</html>

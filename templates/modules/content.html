@@ -1,0 +1,27 @@
+{% extends "../base_file.html" %}
+
+{% block container %}
+<div class="row">
+    <!-- 左预留 -->
+    <div class="col-xs-3">
+        {% block left %}
+        {% end %}
+    </div>
+    <!-- /.左预留 -->
+
+    <!-- 主体内容 -->
+    <div class="col-xs-6" id="main-content">
+        {% block center %}
+
+        {% end %}
+    </div>
+    <!-- /.主体内容 -->
+
+    <!-- 右预留 -->
+    <div class="col-xs-3">
+        {% block right %}
+        {% end %}
+    </div>
+    <!-- /.右预留 -->
+</div>
+{% end %}
