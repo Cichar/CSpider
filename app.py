@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 
+import logging
+
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -28,8 +30,9 @@ class Application(tornado.web.Application):
 
     def run(self):
         try:
-            print('** %s Client Start! **' % __Author__)
+            # print('** CSpider Start! **')
             tornado.options.parse_command_line()
+            logging.info('** CSpider Start! **')
             server = tornado.httpserver.HTTPServer(self)
             server.listen(default_options.port)
             self.io_loop.start()
