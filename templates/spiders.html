@@ -1,0 +1,22 @@
+{% extends "modules/content.html" %}
+
+{% block center %}
+    <div class="">
+        {% for spider in spiders %}
+        <div class="col-md-2 col-sm-6 col-xs-12 task-module">
+            <div class="task-module-box">
+                <span class="task-module-box-icon"><img src="static/img/{{ spider.name }}.png" width="50" height="50"></span>
+
+                <div class="task-module-box-content">
+                    <span class="task-module-box-title">{{ spider.name }}</span>
+                    <!--<span class="task-module-box-desc">test</span>-->
+                </div>
+                <!-- /.task-module-box-content -->
+            </div>
+        </div>
+        {% end %}
+    </div>
+{% end %}
+
+{% block extra_scripts %}
+{% end %}
