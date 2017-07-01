@@ -9,4 +9,4 @@ __Version__ = '0.1'
 
 
 class ZhiHuSpider(BaseSpider):
-    name = u'知乎用户爬虫'
+    name = u'ZhiHuUser'

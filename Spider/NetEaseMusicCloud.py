@@ -9,4 +9,4 @@ __Version__ = '0.1'
 
 
 class NetEaseMusicCloudSpider(BaseSpider):
-    name = u'网易云音乐爬虫'
+    name = u'NetEaseMusicCloud'
