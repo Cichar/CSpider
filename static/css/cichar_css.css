@@ -55,6 +55,8 @@ a {
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
   position: relative;
   min-height: 1px;
+  padding-right:15px;
+  padding-left:15px
 }
 .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
   float: left;
@@ -91,6 +93,9 @@ a {
 }
 .col-xs-2 {
   width: 16.66666667%;
+}
+.col-xs-1-8 {
+  width: 12.5%;
 }
 .col-xs-1 {
   width: 8.33333333%;
@@ -172,6 +177,9 @@ a {
   }
   .col-md-2 {
     width: 16.66666667%;
+  }
+  .col-md-1-8 {
+    width: 13%;
   }
   .col-md-1 {
     width: 8.33333333%;
@@ -266,7 +274,7 @@ a {
     display: block;
     padding: 0 20px;
     background: 0 0;
-    color: black;
+    color: rgb(85,26,139);
     font-size: 15px;
     transition-property: background;
     transition-duration: .2s;
@@ -499,4 +507,63 @@ body {
 }
 .slide-bar {
     border-bottom: 2px solid blue;
+}
+/*
+    任务方法模块框
+ */
+.task-module div{
+    transition-property: all;
+    transition-duration: .2s;
+}
+.task-module div:hover{
+  cursor:pointer;
+  background-color: #f5f5f5;
+}
+/*.task-module.disabled,*/
+/*.task-module.disabled :hover{*/
+  /*cursor: not-allowed;*/
+  /*filter: alpha(opacity=40);*/
+  /*-webkit-box-shadow: none;*/
+  /*box-shadow: none;*/
+  /*opacity: .40;*/
+/*}*/
+.task-module-box {
+  display: block;
+  min-height: 120px;
+  /*background: #fff;*/
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  /*box-shadow: 0 1px rgba(0, 0, 0, 0.1);*/
+  border-radius: 2px;
+  margin-bottom: 15px;
+}
+.task-module-box .task-module-box-icon img{
+  /*border-top-left-radius: 2px;*/
+  /*border-top-right-radius: 0;*/
+  /*border-bottom-right-radius: 0;*/
+  /*border-bottom-left-radius: 2px;*/
+
+  display: block;
+  /*height: 70px;*/
+  /*width: 70px;*/
+  margin: 20px auto 5px;
+  text-align: center;
+  /*font-size: 45px;*/
+  line-height: 70px;
+}
+.task-module-box .task-module-box-content {
+  text-align: center;
+}
+.task-module-box .task-module-box-title {
+  display: block;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 13px;
+}
+.task-module-box .task-module-box-desc {
+  display: block;
+  padding: 0 8px 10px;
+  font-size: 13px;
+  white-space: normal;
+  color: darkgray;
 }
