@@ -5,6 +5,7 @@ import os
 from tornado.web import url
 
 from view import index
+from view import spiders
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -20,4 +21,6 @@ settings = {
 handlers = [
     # 首页
     url(r"/", index.IndexHandler, name="index"),
+    # 爬虫模块
+    url(r"/spiders", spiders.SpidersHandler, name="spiders"),
 ]
