@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+import abc
 import json
 from random import choice
 from urllib.request import urlopen, Request
@@ -25,10 +26,17 @@ __CreateDate__ = '2017/6/27'
 __version__ = '0.1'
 
 
-class BaseSpider:
+class BaseSpider(object, metaclass=abc.ABCMeta):
+
     @property
     def db(self):
         return DataBase()
+
+    @property
+    @abc.abstractmethod
+    def name(self):
+        """ 子类需设置爬虫名称 """
+        return 'BaseSpider'
 
     @staticmethod
     def create_header(flag='default'):
