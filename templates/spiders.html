@@ -1,9 +1,9 @@
 {% extends "modules/content.html" %}
 
 {% block center %}
-    <div class="">
+    <div>
         {% for spider in spiders %}
-        <div class="col-md-2 col-sm-6 col-xs-12 task-module">
+        <a class="col-md-3 col-sm-4 col-xs-6 task-module" href="{{ reverse_url('spider_task') }}">
             <div class="task-module-box">
                 <span class="task-module-box-icon"><img src="static/img/{{ spider.name }}.png" width="50" height="50"></span>
 
@@ -11,9 +11,9 @@
                     <span class="task-module-box-title">{{ spider.name }}</span>
                     <!--<span class="task-module-box-desc">test</span>-->
                 </div>
-                <!-- /.task-module-box-content -->
+                 <!--/.task-module-box-content -->
             </div>
-        </div>
+        </a>
         {% end %}
     </div>
 {% end %}
