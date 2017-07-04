@@ -19,6 +19,10 @@ a {
 h1, h2, h3, h4, h5, h6{
     color: inherit;
 }
+input:focus {
+    outline: none;
+    border: 1px solid cornflowerblue;
+}
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -247,7 +251,8 @@ h1, h2, h3, h4, h5, h6{
  */
 .data-list li a:hover,
 .article-title,
-.nav ul li a {
+.nav ul li a,
+input {
     transition-duration: .2s;
     transition-timing-function: ease-in-out;
     transition-delay: 0s;
@@ -473,23 +478,6 @@ body {
     /*border: 1px solid white;*/
 }
 /*
-    输入框
- */
-form input,
-.L-R-D input{
-    width: 278px;
-    height: 18px;
-    margin-bottom: 10px;
-    outline: none;
-    padding: 10px;
-    font-size: 13px;
-    color: black;
-    /*text-shadow:1px 1px 1px;*/
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
-    background-color: white;
-}
-/*
     登陆界面
  */
 .L-R-D{
@@ -547,6 +535,30 @@ form input,
 }
 .slide-bar {
     border-bottom: 2px solid blue;
+}
+/*
+    表单元素
+ */
+form input,
+.L-R-D input{
+    width: 278px;
+    margin-bottom: 10px;
+    outline: none;
+    padding: 10px;
+    font-size: 13px;
+    color: black;
+    /*text-shadow:1px 1px 1px;*/
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    background-color: white;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.control-label {
+    text-align: right;
+    padding-top: 6px;
+    padding-right: 30px;
 }
 /*
     任务方法模块框
