@@ -27,5 +27,5 @@ handlers = [
     # 爬虫模块
     url(r"/spiders", spiders.SpidersHandler, name="spiders"),
     # 添加爬虫任务
-    url(r"/spider_task", task.SpiderTaskHandler, name="spider_task")
+    url(r"/spider_task/(.+)", task.SpiderTaskHandler, name="spider_task")
 ]

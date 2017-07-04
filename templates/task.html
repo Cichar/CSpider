@@ -6,12 +6,16 @@
             <h3 class="box-title">Add Spider Task</h3>
         </div>
         <div class="box-body">
-            <form action="{{ reverse_url('spider_task') }}" method="post">
+            <form action="/spider_task" method="post">
                 {% raw xsrf_form_html() %}
+                <div class="form-group">
+                    <label for="email" class="col-md-3 control-label">test</label>
+                    <input class="col-md-6" id="email" name="email" required placeholder="Email" type="text" value="">
+                </div>
                 <button type="submit" id="submit" name="submit" class="c-btn c-btn-blue" value="submit" style="margin-left: 45%">Add Task</button>
             </form>
         </div>
-        <div class="box-footer"></div>
+        <!--<div class="box-footer"></div>-->
     </div>
 {% end %}
 
