@@ -24,8 +24,6 @@ class BaseHandler(RequestHandler):
         """ 一个请求完成后调用此方法 """
         try:
             pass
-        except Exception as err:
-            print(err)
         finally:
             self.db.session.close()
 

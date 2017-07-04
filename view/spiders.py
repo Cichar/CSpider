@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from tornado import gen, web
+from tornado import gen
 
 from Utils.BaseHandle import BaseHandler
 from Manager.SpiderManager import SpiderManager

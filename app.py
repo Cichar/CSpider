@@ -63,7 +63,7 @@ class Application(tornado.web.Application):
         self.log('|' + ' ' * 46 + '|')
         self.log('-' * 15 + ' AutoLoad Spiders ' + '-' * 15)
         for _ in SpiderManager().spiders:
-            logging.info(' ' + _.name + ' ' * (47 - len(_.name)  - 16) + 'Initial Success')
+            logging.info(' ' + _.name + ' ' * (47 - len(_.name) - 16) + 'Initial Success')
 
 if __name__ == '__main__':
     Application().run()
