@@ -6,13 +6,22 @@
             <h3 class="box-title">Add Spider Task</h3>
         </div>
         <div class="box-body">
-            <form action="/spider_task" method="post">
+            <form action="/spider_task/{{ form.name }}" method="post" class="">
                 {% raw xsrf_form_html() %}
-                <div class="form-group">
-                    <label for="email" class="col-md-3 control-label">test</label>
-                    <input class="col-md-6" id="email" name="email" required placeholder="Email" type="text" value="">
-                </div>
-                <button type="submit" id="submit" name="submit" class="c-btn c-btn-blue" value="submit" style="margin-left: 45%">Add Task</button>
+                {% for field in form %}
+                    {% if field.type != "SubmitField"  %}
+                    <div class="form-group">
+                        <label for="{{ field.label.field_id }}" class="col-md-3 control-label">{{ field.label.text }}</label>
+                        <input class="col-md-6" id="{{ field.id }}" name="{{ field.name }}" required placeholder="{{ field.name }}" type="{{ field.widget.input_type }}" value="{{field._value()}}">
+                    </div>
+                    {% end %}
+                {% end %}
+
+                {% for field in form %}
+                    {% if field.type == "SubmitField"  %}
+                        <button type="{{ field.widget.input_type }}" id="{{ field.id }}" name="{{ field.name }}" class="c-btn c-btn-blue" value="{{ field.label.text }}" style="margin-left: 45%">Add Task</button>
+                    {% end %}
+                {% end %}
             </form>
         </div>
         <!--<div class="box-footer"></div>-->
