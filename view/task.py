@@ -15,7 +15,7 @@ class SpiderTaskHandler(BaseHandler):
     @gen.coroutine
     def get(self, spider):
         try:
-            form = SpiderManager().spiders[spider]['form']
+            form = SpiderManager().spiders[spider]['form']()
             print(form)
         except Exception as err:
             print(err)
@@ -23,5 +23,9 @@ class SpiderTaskHandler(BaseHandler):
             self.render('task.html', form=form)
 
     @gen.coroutine
-    def post(self):
-        self.write('success')
+    def post(self, spider):
+        try:
+            form = SpiderManager().spiders[spider]['form'](self.request.arguments)
+            self.write(form.data)
+        except Exception as err:
+            print(err)
