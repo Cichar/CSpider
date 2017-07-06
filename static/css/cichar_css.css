@@ -252,6 +252,8 @@ input:focus {
 .data-list li a:hover,
 .article-title,
 .nav ul li a,
+.form-group ul li .checkbox,
+.form-group ul li .checkbox:after,
 input {
     transition-duration: .2s;
     transition-timing-function: ease-in-out;
@@ -555,6 +557,63 @@ form input,
 .form-group {
     margin-bottom: 15px;
 }
+.form-group select {
+    padding: 8px 8px;
+    border-radius: 4px;
+}
+/* 复选框 */
+.form-group ul {
+    padding: 3px 0 0 0;
+    background-color: #f4f4f4;
+}
+.form-group ul li {
+    padding: 4px 12px 8px 12px;
+    font-size: 14px;
+}
+.form-group ul li input[type="checkbox"]{
+    width: auto;
+    visibility: hidden;
+}
+.form-group ul li .checkbox{
+    cursor: pointer;
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px;
+	width: 18px;
+	height: 18px;
+	top: 0;
+  	left: 0;
+	background: #eee;
+	border:1px solid #ddd;
+}
+.form-group ul li .checkbox:hover {
+    background: deepskyblue;
+}
+.form-group ul li .checkbox:after{
+    opacity: 0;
+	content: '';
+	position: absolute;
+	width: 12px;
+	height: 8px;
+	background: transparent;
+    top: 2px;
+    left: 2px;
+	border: 3px solid white;
+	border-top: none;
+	border-right: none;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+.form-group ul li input[type=checkbox]:checked + .checkbox:after {
+	opacity: 1;
+}
+.form-group ul li input[type=checkbox]:checked + .checkbox{
+	background: deepskyblue;
+}
+/* --复选框-- */
 .control-label {
     text-align: right;
     padding-top: 6px;
