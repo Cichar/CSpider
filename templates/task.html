@@ -9,17 +9,33 @@
             <form action="/spider_task/{{ form.name }}" method="post" class="">
                 {% raw xsrf_form_html() %}
                 {% for field in form %}
-                    {% if field.type != "SubmitField"  %}
-                    <div class="form-group">
-                        <label for="{{ field.label.field_id }}" class="col-md-3 control-label">{{ field.label.text }}</label>
-                        <input class="col-md-6" id="{{ field.id }}" name="{{ field.name }}" required placeholder="{{ field.name }}" type="{{ field.widget.input_type }}" value="{{field._value()}}">
-                    </div>
+                    {% if field.type == "StringField"  %}
+                        <div class="form-group">
+                            <label for="{{ field.label.field_id }}" class="col-md-3 control-label">{{ field.label.text }}</label>
+                            <input class="col-md-6" id="{{ field.id }}" name="{{ field.name }}" required placeholder="{{ field.name }}" type="{{ field.widget.input_type }}" value="{{field._value()}}">
+                        </div>
+                    {% elif field.type == "SelectField" %}
+                        <div class="form-group">
+                            <label for="{{ field.label.field_id }}" class="col-md-3 control-label">{{ field.label.text }}</label>
+                            {% raw field %}
+                        </div>
+                    {% elif field.type == "MultipleCheckField" %}
+                        <div class="form-group">
+                            <label for="{{ field.label.field_id }}" class="col-md-3 control-label">{{ field.label.text }}</label>
+                            <ul class="col-md-6" id="{{ field.label.field_id }}">
+                                {% for checkbox in field %}
+                                    <li class="col-md-4">
+                                        {% raw checkbox %}
+                                        <label class="checkbox" for="{{ checkbox.label.field_id }}"></label>
+                                        <label>{{checkbox.label.text}}</label>
+                                    </li>
+                                {% end %}
+                            </ul>
+                        </div>
                     {% end %}
-                {% end %}
 
-                {% for field in form %}
                     {% if field.type == "SubmitField"  %}
-                        <button type="{{ field.widget.input_type }}" id="{{ field.id }}" name="{{ field.name }}" class="c-btn c-btn-blue" value="{{ field.label.text }}" style="margin-left: 45%">Add Task</button>
+                        <button type="{{ field.widget.input_type }}" id="{{ field.id }}" name="{{ field.name }}" class="c-btn c-btn-blue" value="{{ field.label.text }}" style="margin-left: 45%; margin-top: 15px">Add Task</button>
                     {% end %}
                 {% end %}
             </form>
