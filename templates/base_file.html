@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <mcs charset="utf-8">
-        <mcs http-equiv="X-UA-Compatible" content="IE=edge">
-        <mcs content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <title>{% block title %}{% end %}</title>
         <!-- ico -->
         <link rel="shortcut icon" href="{{ static_url('favicon.ico') }}" type="image/x-icon">
@@ -28,12 +28,12 @@
     <body>
         <div class="container">
             <!-- 头部导航栏 -->
-            <div id="header">
+            <div class="nav">
                 {% module Template("modules/header.html") %}
             </div>
             <!-- /.头部导航栏 -->
 
-            <div class="" id="content">
+            <div class="main-body">
                 {% block header-container %}
                 {% end %}
                 {% block container %}
@@ -44,7 +44,7 @@
             {% end %}
 
             <!-- 页脚 -->
-            <footer id="footer">
+            <footer class="main-footer">
                 {% module Template("modules/footer.html") %}
             </footer>
             <!-- /.页脚 -->

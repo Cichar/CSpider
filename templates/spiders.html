@@ -1,14 +1,14 @@
 {% extends "modules/content.html" %}
 
 {% block center %}
-    <div>
+    <div class="module-map">
         {% for spider in spiders %}
-        <a class="col-md-3 col-sm-4 col-xs-6 task-module" href="/spider_task/{{ spider }}">
-            <div class="task-module-box">
-                <span class="task-module-box-icon"><img src="static/img/{{ spider }}.png" width="50" height="50"></span>
+        <a class="col-md-3 col-sm-4 col-xs-6 module" href="/spider_task/{{ spider }}">
+            <div class="module-box">
+                <span class="module-box-icon"><img src="static/img/{{ spider }}.png" width="50" height="50"></span>
 
-                <div class="task-module-box-content">
-                    <span class="task-module-box-title">{{ spider }}</span>
+                <div class="module-box-content">
+                    <span class="module-box-title">{{ spider }}</span>
                     <!--<span class="task-module-box-desc">test</span>-->
                 </div>
                  <!--/.task-module-box-content -->
