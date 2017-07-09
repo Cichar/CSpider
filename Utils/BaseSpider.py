@@ -9,17 +9,6 @@ from Database import DataBase
 from Conf.headers.headers import headers
 from Conf.headers.user_agent import user_agent
 
-""" 
-   **  爬虫基类  **
-
-    初始化BaseSpider，会提供数据库连接实例
-
-    基类中提供：
-                构造随机头的函数    create_header()
-                解析URL的函数       parse_url()
-
-"""
-
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
 __CreateDate__ = '2017/6/27'
@@ -35,14 +24,19 @@ class BaseSpider(object, metaclass=abc.ABCMeta):
     @property
     @abc.abstractmethod
     def name(self):
-        """ 子类需设置爬虫名称 """
+        """ Subclass Need To Provide Name For The Spider """
         return 'BaseSpider'
+
+    @abc.abstractmethod
+    def task_distribute(self, data):
+        """ Subclass Need To Implement This Function To Distribute Tasks. """
+        pass
 
     @staticmethod
     def create_header(flag='default'):
         """ 
-
-        构建随机头，根据flag的不同，提供不同网站的随机header
+        
+        Create Random Headers With Different User-Agent Depend On Flag Arg.
 
         """
 
@@ -52,10 +46,12 @@ class BaseSpider(object, metaclass=abc.ABCMeta):
 
     def parse_url(self, url=None, timeout=2, charset='utf-8', header=None, parse_json=False):
         """ 
-
-        解析URL，默认超时2秒，默认解析编码UTF-8
-        如提供头部参数，则构建包含自定义的头部请求，否则默认不包含自定义头部
-        默认模式不解析json数据
+        
+        Parse URL Function
+        Default : Timeout 2 Seconds
+                  Parse Charset UTF-8
+                  Not Parse Json-Object
+        If Provide Header Args, Create Request With Headers Else Not.
 
         """
 
@@ -64,7 +60,7 @@ class BaseSpider(object, metaclass=abc.ABCMeta):
                 url = Request(url=url, headers=self.create_header(flag=header))
             response = urlopen(url, timeout=timeout)
             data = response.read().decode(charset, 'ignore')
-            # 如果需要用json解析
+            # if need parse json-object
             if parse_json:
                 json_data = json.loads(data)
                 return json_data
