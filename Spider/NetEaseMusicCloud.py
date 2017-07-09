@@ -10,3 +10,6 @@ __Version__ = '0.1'
 
 class NetEaseMusicCloudSpider(BaseSpider):
     name = u'NetEaseMusicCloud'
+
+    def task_distribute(self):
+        pass

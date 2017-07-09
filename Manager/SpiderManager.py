@@ -38,5 +38,5 @@ class SpiderManager(object, metaclass=Singleton):
         forms = {form.name: form for form in BaseForm.__subclasses__()}
 
         for spider in spiders:
-            spiders[spider] = {'spider': spiders[spider], 'form': forms[spider]}
+            spiders[spider] = {'spider': spiders[spider](), 'form': forms[spider]}
         return spiders
