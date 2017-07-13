@@ -5,7 +5,7 @@ import json
 from random import choice
 from urllib.request import urlopen, Request
 
-from Database import DataBase
+from Utils.Singleton import ABC
 from Conf.headers.headers import headers
 from Conf.headers.user_agent import user_agent
 
@@ -15,7 +15,7 @@ __CreateDate__ = '2017/6/27'
 __version__ = '0.1'
 
 
-class BaseSpider(object, metaclass=abc.ABCMeta):
+class BaseSpider(object, metaclass=ABC):
 
     @property
     @abc.abstractmethod
@@ -40,7 +40,8 @@ class BaseSpider(object, metaclass=abc.ABCMeta):
         header['User-Agent'] = choice(user_agent)
         return header
 
-    def parse_url(self, url=None, timeout=2, charset='utf-8', header=None, parse_json=False):
+    @classmethod
+    def parse_url(cls, url=None, timeout=2, charset='utf-8', header=None, parse_json=False):
         """ 
         
         Parse URL Function
@@ -53,7 +54,7 @@ class BaseSpider(object, metaclass=abc.ABCMeta):
 
         try:
             if header:
-                url = Request(url=url, headers=self.create_header(flag=header))
+                url = Request(url=url, headers=cls.create_header(flag=header))
             response = urlopen(url, timeout=timeout)
             data = response.read().decode(charset, 'ignore')
             # if need parse json-object
@@ -65,3 +66,5 @@ class BaseSpider(object, metaclass=abc.ABCMeta):
         except Exception as err:
             print('** parse_url : %s **' % str(err))
             raise Exception(err)
+
+
