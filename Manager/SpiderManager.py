@@ -20,10 +20,10 @@ class SpiderManager(object, metaclass=Singleton):
     """ Spider Manager """
 
     def __init__(self):
-        self.spiders = self.create_spider_dict()
+        self.spiders = self.__create_spider_dict()
 
     @staticmethod
-    def create_spider_dict():
+    def __create_spider_dict():
         """ Create Spider Dict 
             
             Example:
