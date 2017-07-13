@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 
-from time import sleep
 from datetime import datetime
 
 from Utils.BaseSpider import BaseSpider
@@ -52,14 +51,12 @@ class ZhiHuSpider(BaseSpider):
                     spider_worker.send_task('Spider.Zhihu.get_user_infos',
                                             kwargs={'user_token': user_token, 'updata': updata,
                                                     'crawl_flag': True})
-            sleep(5)
             crawl_user = db.session.query(ZhiHuUserInfo).filter_by(crawl_flag=None or False).first()
             while crawl_user:
                 crawl_user.crawl_flag = True
                 db.session.commit()
                 spider_worker.send_task('Spider.Zhihu.get_user_infos',
                                         kwargs={'user_token': crawl_user.url_token, 'updata': updata})
-                sleep(5)
                 crawl_user = db.session.query(ZhiHuUserInfo).filter_by(crawl_flag=None or False).first()
         except Exception as err:
             print('** start : %s **' % str(err))
@@ -83,14 +80,13 @@ class ZhiHuSpider(BaseSpider):
             print('** get_user_infos : %s **' % str(err))
 
     @staticmethod
-    @spider_worker.task(rate_limit='20/m')
+    @spider_worker.task(rate_limit='30/m')
     def get_user_info(user_token=None, updata=False, crawl_flag=False):
         """ Get User Info
             Request URL: http://www.zhihu.com/api/v4/members/{url_token}?include={user_arg}
         """
 
         user_info_url = 'http://www.zhihu.com/api/v4/members/{url_token}?include={user_arg}'
-        sleep(0.5)
         try:
             if user_token:
                 data = ZhiHuSpider().parse_url(url=user_info_url.format(url_token=user_token,
@@ -194,7 +190,6 @@ class ZhiHuSpider(BaseSpider):
 
         follower_url = 'http://www.zhihu.com/api/v4/members/{url_token}/followers?' \
                        'include={follow_arg}&offset={offset}&limit={limit}'
-        sleep(0.5)
         try:
             if user_token:
                 followers = ZhiHuSpider().parse_url(url=follower_url.format(url_token=user_token,
@@ -229,7 +224,6 @@ class ZhiHuSpider(BaseSpider):
 
         following_url = 'http://www.zhihu.com/api/v4/members/{url_token}/followees?' \
                         'include={follow_arg}&offset={offset}&limit={limit}'
-        sleep(0.5)
         try:
             if user_token:
                 followings = ZhiHuSpider().parse_url(url=following_url.format(url_token=user_token,
