@@ -18,10 +18,6 @@ __version__ = '0.1'
 class BaseSpider(object, metaclass=abc.ABCMeta):
 
     @property
-    def db(self):
-        return DataBase()
-
-    @property
     @abc.abstractmethod
     def name(self):
         """ Subclass Need To Provide Name For The Spider """
