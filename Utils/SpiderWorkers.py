@@ -13,10 +13,10 @@ spider_worker.conf.update(
     # TimeZone
     CELERY_TIMEZONE='Asia/Shanghai',
     CELERY_ENABLE_UTC=True,
-    # # Serializer
-    # CELERY_ACCEPT_CONTENT=['json'],
-    # CELERY_TASK_SERIALIZER='json',
-    # CELERY_RESULT_SERIALIZER='json',
+    # Serializer
+    CELERY_ACCEPT_CONTENT=['json'],
+    CELERY_TASK_SERIALIZER='json',
+    CELERY_RESULT_SERIALIZER='json',
     # Schedule Task
     # cmd: celery beat -A Utils.SpiderWorkers -l info
     CELERYBEAT_SCHEDULE={
