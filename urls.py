@@ -7,6 +7,7 @@ from tornado.web import url
 from view import index
 from view import spiders
 from view import task
+from Utils.BaseHandle import ErrorHandler
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -19,6 +20,8 @@ settings = {
     'debug': True,
     'xsrf_cookies': True,
     'cookie_secret': "aYCg6pESRtKos6GkHn/VB9oXbPT2g0R0kQvJ3/xJ89E=",
+    'default_handler_class': ErrorHandler,
+    'default_handler_args': dict(status_code=404)
 }
 
 handlers = [
