@@ -617,3 +617,92 @@ form input {
     border-radius: 0 0 3px 3px;
     border-top: 1px solid #f4f4f4;
 }
+
+/*
+    Error Page
+ */
+.error-page{
+    width:600px;
+    margin:250px auto 0 auto
+}
+.error-page>.headline{
+    float:left;
+    font-size:100px;
+    font-weight:300
+}
+.error-page>.error-content{
+    margin-left:190px;
+    display:block
+}
+.error-page>.error-content>h3{
+    font-weight:300;
+    font-size:25px
+}
+@media (max-width:991px){
+    .error-page{
+        width:100%
+    }
+    .error-page>.headline{
+        float:none;
+        text-align:center
+    }
+    .error-page>.error-content{
+        margin-left:0
+    }
+    .error-page>.error-content>h3,
+    .error-page>.error-content>p{
+        text-align:center
+    }
+}
+
+/*
+    Text Color
+ */
+.text-red{
+    color:#dd4b39 !important
+}
+.text-yellow{
+    color:#f39c12 !important
+}
+.text-aqua{
+    color:#00c0ef !important
+}
+.text-blue{
+    color:#0073b7 !important
+}
+.text-black{
+    color:#111 !important
+}
+.text-light-blue{
+    color:#3c8dbc !important
+}
+.text-green{
+    color:#00a65a !important
+}
+.text-gray{
+    color:#d2d6de !important
+}
+.text-navy{
+    color:#001f3f !important
+}
+.text-teal{
+    color:#39cccc !important
+}
+.text-olive{
+    color:#3d9970 !important
+}
+.text-lime{
+    color:#01ff70 !important
+}
+.text-orange{
+    color:#ff851b !important
+}
+.text-fuchsia{
+    color:#f012be !important
+}
+.text-purple{
+    color:#605ca8 !important
+}
+.text-maroon{
+    color:#d81b60 !important
+}
