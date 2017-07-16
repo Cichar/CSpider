@@ -6,6 +6,7 @@ from random import choice
 from urllib.request import urlopen, Request
 
 from Utils.Singleton import ABC
+from Utils.Exception import ParseUrlError
 from Conf.headers.headers import headers
 from Conf.headers.user_agent import user_agent
 
@@ -64,7 +65,6 @@ class BaseSpider(object, metaclass=ABC):
             else:
                 return data
         except Exception as err:
-            print('** parse_url : %s **' % str(err))
-            raise Exception(err)
+            raise ParseUrlError(err)
 
 
