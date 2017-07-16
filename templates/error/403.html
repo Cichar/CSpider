@@ -1,0 +1,18 @@
+{% extends "base_error.html" %}
+{% block title %}SPARTANS - 禁止访问{% end %}
+
+{% block body%}
+    <div class="error-page">
+        <h3 class="headline text-yellow"> 403</h3>
+
+        <div class="error-content" style="padding-top: 30px">
+          <h3><i class="fa fa-warning text-yellow"></i> 禁止访问</h3>
+
+          <p>
+            服务器拒绝了你的访问请求，
+            <a href="{{ reverse_url('index') }}">返回首页</a>.
+          </p>
+
+        </div>
+    </div>
+{% end %}

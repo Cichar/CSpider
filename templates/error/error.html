@@ -1,0 +1,19 @@
+{% extends "base_error.html" %}
+
+{% block title %}SPARTANS - 页面错误{% end %}
+
+{% block body%}
+    <div class="error-page">
+        <h3 class="headline text-yellow"> {{ status_code }}</h3>
+
+        <div class="error-content" style="padding-top: 30px">
+          <h3><i class="fa fa-warning text-yellow"></i> 页面错误</h3>
+
+          <p>
+            服务器错误
+            <a href="{{ reverse_url('index') }}">返回首页</a>.
+          </p>
+
+        </div>
+    </div>
+{% end %}
