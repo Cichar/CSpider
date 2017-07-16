@@ -62,7 +62,7 @@ class ZhiHuSpider(BaseSpider):
             print('** start : %s **' % str(err))
 
     @staticmethod
-    @spider_worker.task(rate_limit='10/m')
+    @spider_worker.task(rate_limit='6/m')
     def get_user_infos(user_token=None, updata=False, crawl_flag=False):
         """ Get The User's Info 、 Followers And Following """
 
@@ -182,7 +182,7 @@ class ZhiHuSpider(BaseSpider):
             print('** get_user_info : %s **' % str(err))
 
     @staticmethod
-    @spider_worker.task(rate_limit='10/m')
+    @spider_worker.task(rate_limit='6/m')
     def get_user_followers(user_token=None, url=None, updata=False):
         """ Get User's Followers
             Request URL: http://www.zhihu.com/api/v4/members/{url_token}/followers?include={follow_arg}&offset={offset}&limit={limit}
@@ -216,7 +216,7 @@ class ZhiHuSpider(BaseSpider):
             print('** get_user_followers : %s **' % str(err))
 
     @staticmethod
-    @spider_worker.task(rate_limit='10/m')
+    @spider_worker.task(rate_limit='6/m')
     def get_user_following(user_token=None, url=None, updata=False):
         """ Get User's Following
             Request URL: https://www.zhihu.com/api/v4/members/{url_token}/followees?include={follow_arg}&offset={offset}&limit={limit}
