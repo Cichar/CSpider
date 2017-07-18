@@ -4,9 +4,11 @@ import os
 
 from tornado.web import url
 
+from view import task
 from view import index
 from view import spiders
-from view import task
+from view import monitor
+from Websocket import monitor as ws_monitor
 from Utils.BaseHandle import ErrorHandler
 
 __Author__ = 'Cichar'
@@ -25,10 +27,14 @@ settings = {
 }
 
 handlers = [
-    # 首页
+    # Index
     url(r"/", index.IndexHandler, name="index"),
-    # 爬虫模块
+    # Spider Modules
     url(r"/spiders", spiders.SpidersHandler, name="spiders"),
-    # 添加爬虫任务
-    url(r"/spider_task/(.+)", task.SpiderTaskHandler, name="spider_task")
+    # Spider Task
+    url(r"/spider_task/(.+)", task.SpiderTaskHandler, name="spider_task"),
+    # Monitor
+    url(r"/monitor", monitor.MonitorHandler, name="monitor"),
+    # Monitor Update Websocket
+    (r"/update-monitor", ws_monitor.MonitorUpdateHandler),
 ]
