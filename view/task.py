@@ -22,7 +22,7 @@ class SpiderTaskHandler(BaseHandler):
         except Exception as err:
             print(err)
         else:
-            self.render('task.html', form=form)
+            return self.render('task.html', form=form)
 
     @gen.coroutine
     def post(self, spider_name):
@@ -38,4 +38,4 @@ class SpiderTaskHandler(BaseHandler):
         except Exception as err:
             print(err)
         else:
-            self.write(form.data)
+            return self.write(form.data)

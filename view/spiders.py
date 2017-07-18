@@ -14,5 +14,9 @@ __Version__ = '0.1'
 class SpidersHandler(BaseHandler):
     @gen.coroutine
     def get(self):
+        """ From SpiderManager Getting Spiders, 
+            Then Pass Spider Objects To The Web To Render Spider  
+        """
+
         spiders = SpiderManager().spiders
-        self.render("spiders.html", spiders=spiders)
+        return self.render("spiders.html", spiders=spiders)

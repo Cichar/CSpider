@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from tornado import gen, web
+from tornado import gen
 
 from Utils.BaseHandle import BaseHandler
 
@@ -13,4 +13,4 @@ __Version__ = '0.1'
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        self.render("index.html")
+        return self.render("index.html")
