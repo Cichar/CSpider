@@ -352,7 +352,7 @@ input {
  */
 .main-body {
     position: relative;
-    margin-bottom: 140px;
+    margin-bottom: 50px;
 }
 @media (max-width: 767px) {
   .main-body {
@@ -705,4 +705,46 @@ form input {
 }
 .text-maroon{
     color:#d81b60 !important
+}
+
+/*
+    Text Configuration
+ */
+.text-center {
+  text-align: center;
+}
+
+/*
+    表格样式
+ */
+.c-table {
+    position:relative;
+    border:1px solid rgba(0,0,0,.12);
+    border-collapse:collapse;
+    font-size:13px;
+    background-color:#fff
+}
+.c-table-td {
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.117647);
+}
+.c-table tbody tr{
+    height: 48px;
+    transition-duration:.28s;
+    vertical-align: middle;
+    transition-timing-function:cubic-bezier(.4,0,.2,1);
+    transition-property:background-color
+}
+.c-table tbody tr:hover{
+    background-color:#eee
+}
+.column-search {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    outline: none;
+}
+.column-search :focus {
+
 }
