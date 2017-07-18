@@ -4,10 +4,10 @@ from celery import Celery
 from kombu import Queue
 from kombu import Exchange
 
-from Conf.config import CELERY_BROKER_URI
+from Conf.config import config
 
 
-spider_worker = Celery('CSpider', include=['Spider'], broker=CELERY_BROKER_URI)
+spider_worker = Celery('CSpider', include=['Spider'], broker=config['default']['CELERY_BROKER_URI'])
 
 spider_worker.conf.update(
     # TimeZone

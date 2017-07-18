@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-from Conf.config import SQLALCHEMY_DATABASE_URI
+from Conf.config import config
 
 Base = declarative_base()
 
@@ -29,7 +29,7 @@ class DataBase:
 
         """
 
-        created_engine = create_engine(SQLALCHEMY_DATABASE_URI + '?charset=utf8',
+        created_engine = create_engine(config['default']['SQLALCHEMY_DATABASE_URI'] + '?charset=utf8',
                                        encoding='utf-8', pool_recycle=5, pool_size=20)
         return created_engine
 
