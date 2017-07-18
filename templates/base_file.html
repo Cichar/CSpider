@@ -18,9 +18,14 @@
         <script src="{{ static_url('other/pace/pace.min.js') }}"></script>
         <link rel="stylesheet" href="{{ static_url('other/pace/pace_flash.css') }}">
         <!-- iziToast -->
-        <link rel="stylesheet" href="{{ static_url('iziToast/iziToast.min.css') }}">
-        <script src="{{ static_url('iziToast/iziToast.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ static_url('other/iziToast/iziToast.min.css') }}">
+        <script src="{{ static_url('other/iziToast/iziToast.min.js') }}"></script>
         <script src="{{ static_url('js/project/notify_info.js') }}"></script>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="{{ static_url('other/datatables/jquery.dataTables.min.css') }}">
+        <script src="{{ static_url('other/datatables/jquery.dataTables.min.js') }}"></script>
+        <!-- Chart.JS -->
+        <script src="{{ static_url('other/chartJS/Chart.min.js') }}"></script>
         {% block header-script %}
         {% end %}
     </head>
@@ -33,7 +38,7 @@
             </div>
             <!-- /.头部导航栏 -->
 
-            <div class="main-body">
+            <div class="main-body clearfix">
                 {% block header-container %}
                 {% end %}
                 {% block container %}
