@@ -10,6 +10,8 @@ import celery
 from celery.events.state import State
 from tornado.ioloop import PeriodicCallback
 
+from Utils.BaseService import BaseService
+
 
 class EventsState(State):
     def __init__(self, *args, **kwargs):
@@ -38,7 +40,7 @@ class EventsState(State):
         super(EventsState, self).event(event)
 
 
-class Monitor(threading.Thread):
+class Monitor(threading.Thread, BaseService):
     events_enable_interval = 5000
 
     def __init__(self, c_app=None, io_loop=None, enable_events=True, config=None, log=None):
@@ -57,10 +59,19 @@ class Monitor(threading.Thread):
                                       self.config.get(
                                           'MONITOR_EVENTS_ENABLE_INTERVAL', None) or self.events_enable_interval)
 
-    def start(self):
-        threading.Thread.start(self)
-        if self.enable_events and celery.VERSION[0] > 2:
-            self.timer.start()
+        self.started = False
+
+    def start(self, flag=False):
+        try:
+            self.daemon = flag
+            threading.Thread.start(self)
+            if self.enable_events and celery.VERSION[0] > 2:
+                self.timer.start()
+        except Exception as err:
+            self.started = False
+            self.log.error(str(err))
+        else:
+            self.started = True
 
     def run(self):
         """ When Call threading.Thread.start() Function , It will Call Run Function.
