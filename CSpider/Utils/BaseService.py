@@ -1,5 +1,8 @@
 # -*- coding:utf-8 -*-
 
 
-class BaseService:
+from Utils.Singleton import ABC
+
+
+class BaseService(object, metaclass=ABC):
     pass
