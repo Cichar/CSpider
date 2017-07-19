@@ -6,7 +6,7 @@ from collections import defaultdict
 class DefaultConfig(object):
     # Celery Monitor Configuration
     MONITOR_EVENTS_ENABLE_INTERVAL = 5000
-    MONITOR_UPDATE_INTERVAL = 3000
+    MONITOR_UPDATE_INTERVAL = 5000
 
 
 class DevelopmentConfig(DefaultConfig):
@@ -22,7 +22,7 @@ class TestingConfig(DefaultConfig):
     SQLALCHEMY_DATABASE_URI = ''
 
     # Celery broker
-    CELERY_BROKER_URI = 'redis://'
+    CELERY_BROKER_URI = 'redis:'
 
 
 class ProductionConfig(DefaultConfig):
