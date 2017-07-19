@@ -2,6 +2,7 @@
 
 import logging
 from functools import partial
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
 import tornado.httpserver
@@ -14,9 +15,10 @@ from urls import settings
 from Database import db
 from Conf.config import config
 from Conf.options import default_options
+from Service.Monitor import Monitor
 from Utils.SpiderWorkers import spider_worker
-from Monitor.monitor import Monitor
 from Manager.SpiderManager import SpiderManager
+from Manager.ServiceManager import ServiceManager
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -32,6 +34,8 @@ class Application(tornado.web.Application):
     monitor_pool_default = ThreadPoolExecutor
     monitor_pool_worker = 4
 
+    _service = ['monitor']
+
     def __init__(self):
         super(Application, self).__init__(handlers=handlers, **settings)
         # Extra Configuration
@@ -43,6 +47,12 @@ class Application(tornado.web.Application):
         # Log
         self.log = logging
 
+        # Spiders
+        self.spiders = SpiderManager().spiders
+
+        # Services
+        self.inner_services = ServiceManager()
+
         # Monitor
         self.c_app = spider_worker
         self.monitor = Monitor(c_app=self.c_app, io_loop=self.io_loop, config=self.extra_config['MONITOR'],
@@ -53,14 +63,14 @@ class Application(tornado.web.Application):
         """ Server Start """
 
         try:
-            self.monitor.start()
+            self.register_service()
             tornado.options.parse_command_line()
             self.start_log_msg()
             server = tornado.httpserver.HTTPServer(self)
             server.listen(default_options.port)
             self.io_loop.start()
         except Exception as err:
-            print(err)
+            self.log.error(str(err))
 
     def start_log_msg(self):
         """ Server Start Output Info """
@@ -69,9 +79,28 @@ class Application(tornado.web.Application):
         self.log.info('|' + ' ' * 46 + '|')
         self.log.info('|' + ' ' * 19 + 'CSpider ' + ' ' * 19 + '|')
         self.log.info('|' + ' ' * 46 + '|')
+
         self.log.info('-' * 15 + ' AutoLoad Spiders ' + '-' * 15)
-        for _ in SpiderManager().spiders:
+        for _ in self.spiders:
             self.log.info(' ' + _ + ' ' * (47 - len(_) - 16) + 'Initial Success')
+        self.log.info('')
+
+        if self.inner_services:
+            self.log.info('-' * 12 + ' Auto Register Services ' + '-' * 12)
+            for key, value in self.inner_services.services.items():
+                if value:
+                    self.log.info(' ' + key + ' ' * (47 - len(key) - 14) + 'Start Success')
+                else:
+                    self.log.info(' ' + key + ' ' * (47 - len(key) - 9) + 'No Start')
+            self.log.info('-' * 48)
+
+    def register_service(self):
+        """ Register Service In Application """
+
+        for service in self._service:
+            if getattr(getattr(self, service), 'start', None):
+                getattr(self, service).start(flag=True)
+            self.inner_services.register_service(getattr(self, service))
 
     def delay(self, method, *args, **kwargs):
         """ Query Monitor's Info """
