@@ -8,86 +8,82 @@ var host = $(location).attr('host'),
     ws.onmessage = function (event) {
         var update = $.parseJSON(event.data);
         workers_update(update);
-        graph_status_data(update)
+        status_data_update(update);
     };
-
 
 /*
-    Initial Chart Canvas
-*/
-var statusData = {
-        labels : [],
-        datasets: [
-            {
-                label: "Running",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(0,192,239,0.4)",
-                // line color
-                borderColor: "rgba(0,192,239,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(0,192,239,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                // point background color
-                pointHoverBackgroundColor: "rgba(0,192,239,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: [],
-                spanGaps: false
-            }
-        ]
-    };
+    EChart Initial
+ */
+var statusChart = echarts.init(document.getElementById('worker-status-chart'));
 
-var statusOptions = {
-    scales: {
-        yAxes: [{
-            ticks: {
-            }
-        }],
-        xAxes: [{
-            ticks: {
-                  callback: function(value) {
-                      return null;
-                  }
-            }
-        }]
-    }
-};
+var statusData = [];
+var statusDate = [];
 
-var statusChartCanvas = $("#cluster_status_Chart").get(0).getContext("2d");
-
-// X Cell
 for (var i = 0; i < 120; i++) {
-    statusData.labels.push('');
-    statusData.datasets[0].data.push(null);
+    statusData.push(null);
+    statusDate.push('')
 }
 
-var statusChart = new Chart(statusChartCanvas, {
-    type: 'line',
-    data: statusData,
-    options: statusOptions
-});
+var option = {
+    title: {
+        text: 'Workers Status'
+    },
+    tooltip: {
+        trigger: 'axis',
+        formatter: function (data) {
+            data = data[0];
+            return data.value[0] + ' / ' + data.value[1];
+        },
+        axisPointer: {
+            animation: false
+        }
+    },
+    xAxis: {
+        type: 'category',
+        data: statusDate,
+        splitLine: {
+            show: false
+        }
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '50%'],
+        splitLine: {
+            show: false
+        }
+    },
+    series: [{
+        name: 'Running',
+        type: 'line',
+        showSymbol: false,
+        hoverAnimation: false,
+        data: statusData
+    }]
+};
 
-function graph_status_data(data) {
+statusChart.setOption(option);
 
-    // 进行中
-    statusData.datasets[0].data.shift();
-    statusData.labels.shift();
+function status_data_update(update) {
+    var now = new Date();
+    var data = {
+        value: [
+            [now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
+            update.active
+        ]
+    };
+    statusData.shift();
+    statusDate.shift();
+    statusData.push(data);
+    statusDate.push(data.value[0]);
 
-    var label = '';
-
-    // 进行中
-    statusData.datasets[0].data.push(data.active);
-    statusData.labels.push(label);
-
-    statusChart.update();
+    statusChart.setOption({
+        xAxis: {
+            data: statusDate
+        },
+        series: [{
+            data: statusData
+        }]
+    });
 }
 
 /*
