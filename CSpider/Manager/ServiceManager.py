@@ -16,23 +16,10 @@ class ServiceManager(BaseManager):
 
     def __init__(self):
         super().__init__()
+        self._module_import(module_dir=['Service'],
+                            wrong_file=['__init__', '__pycache__'],
+                            packages=True)
         self.services = self._create_dict()
-
-    def _module_import(self):
-        """ Import Modules For Manager Dict """
-
-        try:
-            import os
-            import glob
-
-            wrong_file = ['__init__', '__pycache__']
-
-            for module_file in glob.glob(r'Service\*'):
-                module_name, _ = os.path.splitext(os.path.basename(module_file))
-                if module_name not in wrong_file:
-                    __import__('Service.' + module_name)
-        except Exception as err:
-            print(err)
 
     def _create_dict(self):
         """ Initial Application Service Dict 

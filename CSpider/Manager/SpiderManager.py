@@ -17,22 +17,8 @@ class SpiderManager(BaseManager):
 
     def __init__(self):
         super().__init__()
+        self._module_import(module_dir=self._dir_list, wrong_file=['__init__'])
         self.spiders = self._create_dict()
-
-    def _module_import(self):
-        """ Import Modules For Manager Dict """
-
-        try:
-            import os
-            import glob
-
-            for _dir in self._dir_list:
-                for module_file in glob.glob(r'{0}\*.py'.format(_dir)):
-                    module_name, _ = os.path.splitext(os.path.basename(module_file))
-                    if module_name != '__init__':
-                        __import__('{0}.'.format(_dir) + module_name)
-        except Exception as err:
-            print(err)
 
     def _create_dict(self):
         """ Create Spiders Dict 
