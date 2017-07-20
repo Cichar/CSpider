@@ -66,5 +66,3 @@ class BaseSpider(object, metaclass=ABC):
                 return data
         except Exception as err:
             raise ParseUrlError(str(err))
-
-

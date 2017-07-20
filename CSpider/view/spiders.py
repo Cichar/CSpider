@@ -3,7 +3,6 @@
 from tornado import gen
 
 from Utils.BaseHandle import BaseHandler
-from Manager.SpiderManager import SpiderManager
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -14,9 +13,9 @@ __Version__ = '0.1'
 class SpidersHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        """ From SpiderManager Getting Spiders, 
-            Then Pass Spider Objects To The Web To Render Spider  
+        """ From Application Getting Spiders, 
+            Then Pass Spider's Name To The Web To Render.  
         """
 
-        spiders = SpiderManager().spiders
+        spiders = [spider for spider in self.spiders]
         return self.render("spiders.html", spiders=spiders)

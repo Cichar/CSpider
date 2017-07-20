@@ -27,6 +27,10 @@ class BaseHandler(tornado.web.RequestHandler):
     def db(self):
         return self.application.db
 
+    @property
+    def spiders(self):
+        return self.application.spiders
+
     def on_finish(self):
         """ On Request Finish, Close The Database Session """
         try:

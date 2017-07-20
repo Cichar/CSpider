@@ -2,7 +2,6 @@
 
 import logging
 from functools import partial
-from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
 import tornado.httpserver
@@ -72,6 +71,19 @@ class Application(tornado.web.Application):
         except Exception as err:
             self.log.error(str(err))
 
+    def register_service(self):
+        """ Register Service In Application """
+
+        for service in self._service:
+            if getattr(getattr(self, service), 'start', None):
+                getattr(self, service).start(flag=True)
+            self.inner_services.register_service(getattr(self, service))
+
+    def delay(self, method, *args, **kwargs):
+        """ Query Monitor's Info """
+
+        return self.monitor_pool.submit(partial(method, *args, **kwargs))
+
     def start_log_msg(self):
         """ Server Start Output Info """
 
@@ -93,19 +105,6 @@ class Application(tornado.web.Application):
                 else:
                     self.log.info(' ' + key + ' ' * (47 - len(key) - 9) + 'No Start')
             self.log.info('-' * 48)
-
-    def register_service(self):
-        """ Register Service In Application """
-
-        for service in self._service:
-            if getattr(getattr(self, service), 'start', None):
-                getattr(self, service).start(flag=True)
-            self.inner_services.register_service(getattr(self, service))
-
-    def delay(self, method, *args, **kwargs):
-        """ Query Monitor's Info """
-
-        return self.monitor_pool.submit(partial(method, *args, **kwargs))
 
 if __name__ == '__main__':
     Application().run()

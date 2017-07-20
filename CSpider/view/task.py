@@ -1,6 +1,5 @@
 # -*- utf-8 -*-
 
-from Manager.SpiderManager import SpiderManager
 from Utils.BaseHandle import BaseHandler
 from tornado import gen
 
@@ -18,7 +17,7 @@ class SpiderTaskHandler(BaseHandler):
         """
 
         try:
-            form = SpiderManager().spiders[spider_name]['form']()
+            form = self.spiders[spider_name]['form']()
         except Exception as err:
             print(err)
         else:
@@ -32,10 +31,10 @@ class SpiderTaskHandler(BaseHandler):
         """
 
         try:
-            spider_dict = SpiderManager().spiders[spider_name]
+            spider_dict = self.spiders[spider_name]
             form = spider_dict['form'](self.request.arguments)
             spider_dict['spider'].task_distribute(form.data)
         except Exception as err:
             print(err)
         else:
-            return self.write(form.data)
+            return self.write('OK.')
