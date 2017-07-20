@@ -18,12 +18,8 @@ class ServiceManager(BaseManager):
         super().__init__()
         self.services = self._create_dict()
 
-    def _create_dict(self):
-        """ Initial Application Service Dict 
-            
-            Example:
-                {'Monitor': ''}
-        """
+    def _module_import(self):
+        """ Import Modules For Manager Dict """
 
         try:
             import os
@@ -37,10 +33,17 @@ class ServiceManager(BaseManager):
                     __import__('Service.' + module_name)
         except Exception as err:
             print(err)
-        else:
-            _dict = defaultdict(dict)
-            _dict.update({_.__name__: '' for _ in BaseService.__subclasses__()})
-            return _dict
+
+    def _create_dict(self):
+        """ Initial Application Service Dict 
+            
+            Example:
+                {'Monitor': ''}
+        """
+
+        _dict = defaultdict(dict)
+        _dict.update({_.__name__: '' for _ in BaseService.__subclasses__()})
+        return _dict
 
     def register_service(self, obj):
         """ Register Service 

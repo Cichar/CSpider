@@ -12,8 +12,12 @@ __version__ = '0.1'
 
 class BaseManager(object, metaclass=ABC):
     def __init__(self):
-        pass
+        self._module_import()
 
     @abc.abstractmethod
     def _create_dict(self):
+        pass
+
+    @abc.abstractmethod
+    def _module_import(self):
         pass

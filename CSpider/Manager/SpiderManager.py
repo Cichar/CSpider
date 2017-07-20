@@ -19,16 +19,8 @@ class SpiderManager(BaseManager):
         super().__init__()
         self.spiders = self._create_dict()
 
-    def _create_dict(self):
-        """ Create Spider Dict 
-            
-            Example:
-              {'NetEaseMusicCloud': {'spider': <class 'Spider.NetEaseMusicCloud.NetEaseMusicCloudSpider'>, 
-                                     'form': <class 'Form.TaskForm.NetEaseMusicCloudForm'>}, 
-               'ZhiHuUser': {'spider': <class 'Spider.Zhihu.ZhiHuSpider'>, 
-                             'form': <class 'Form.TaskForm.ZhiHuForm'>}
-              }
-        """
+    def _module_import(self):
+        """ Import Modules For Manager Dict """
 
         try:
             import os
@@ -41,11 +33,22 @@ class SpiderManager(BaseManager):
                         __import__('{0}.'.format(_dir) + module_name)
         except Exception as err:
             print(err)
-        else:
-            spiders = {spider.name: spider for spider in BaseSpider.__subclasses__()}
-            forms = {form.name: form for form in BaseForm.__subclasses__()}
 
-            for spider in spiders:
-                spiders[spider] = {'spider': spiders[spider](), 'form': forms[spider]}
+    def _create_dict(self):
+        """ Create Spiders Dict 
+            
+            Example:
+              {'NetEaseMusicCloud': {'spider': <class 'Spider.NetEaseMusicCloud.NetEaseMusicCloudSpider'>, 
+                                     'form': <class 'Form.TaskForm.NetEaseMusicCloudForm'>}, 
+               'ZhiHuUser': {'spider': <class 'Spider.Zhihu.ZhiHuSpider'>, 
+                             'form': <class 'Form.TaskForm.ZhiHuForm'>}
+              }
+        """
 
-            return spiders
+        spiders = {spider.name: spider for spider in BaseSpider.__subclasses__()}
+        forms = {form.name: form for form in BaseForm.__subclasses__()}
+
+        for spider in spiders:
+            spiders[spider] = {'spider': spiders[spider](), 'form': forms[spider]}
+
+        return spiders
