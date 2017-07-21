@@ -9,7 +9,7 @@ class BaseError(Exception):
         self.err = err
 
     def __str__(self, *args, **kwargs):
-        return '< {0} >:{1}'.format(self.__class__.__name__, self.err)
+        return '< {0} > : {1}'.format(self.__class__.__name__, self.err)
 
 
 class ParseUrlError(BaseError):
