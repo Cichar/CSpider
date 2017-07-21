@@ -7,26 +7,26 @@ var host = $(location).attr('host'),
         ws = new WebSocket(protocol + host  + "/update-monitor");
     ws.onmessage = function (event) {
         var update = $.parseJSON(event.data);
-        workers_update(update);
-        status_data_update(update);
+        workers_update(update.workers);
+        chart_update(update.active, update.queues);
     };
 
 /*
     EChart Initial
  */
-var statusChart = echarts.init(document.getElementById('worker-status-chart'));
+var WorkerData = [];
+var WorkerDate = [];
+var WorkerScaleNum = 120;
+var WorkerChart = echarts.init(document.getElementById('worker-status-chart'));
 
-var statusData = [];
-var statusDate = [];
-
-for (var i = 0; i < 120; i++) {
-    statusData.push(null);
-    statusDate.push('')
+for (var i = 0; i < WorkerScaleNum; i++) {
+    WorkerData.push(null);
+    WorkerDate.push('')
 }
 
-var option = {
+var WorkerChartOption = {
     title: {
-        text: 'Workers Status'
+        text: 'Running Task'
     },
     tooltip: {
         trigger: 'axis',
@@ -40,9 +40,12 @@ var option = {
     },
     xAxis: {
         type: 'category',
-        data: statusDate,
+        data: WorkerDate,
         splitLine: {
             show: false
+        },
+        axisLabel: {
+            interval: WorkerScaleNum/6
         }
     },
     yAxis: {
@@ -57,32 +60,108 @@ var option = {
         type: 'line',
         showSymbol: false,
         hoverAnimation: false,
-        data: statusData
+        data: WorkerData
     }]
 };
 
-statusChart.setOption(option);
 
-function status_data_update(update) {
+var QueueData = {};
+var QueueDate = [];
+var QueueScaleNum = 1000;
+var QueueChart = echarts.init(document.getElementById('queue-status-chart'));
+
+for (var i = 0; i < QueueScaleNum; i++) {
+    QueueDate.push('')
+}
+
+var QueueChartOption = {
+    title: {
+        text: 'Queue Info'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    xAxis: {
+        type: 'category',
+        data: QueueDate,
+        splitLine: {
+            show: false
+        },
+        axisLabel: {
+            interval: QueueScaleNum/6
+        }
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '20%'],
+        splitLine: {
+            show: false
+        }
+    },
+    series: []
+};
+
+WorkerChart.setOption(WorkerChartOption);
+QueueChart.setOption(QueueChartOption);
+
+function chart_update(active, queues) {
     var now = new Date();
     var data = {
         value: [
             [now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
-            update.active
+            active
         ]
     };
-    statusData.shift();
-    statusDate.shift();
-    statusData.push(data);
-    statusDate.push(data.value[0]);
+    WorkerData.shift();
+    WorkerDate.shift();
+    WorkerData.push(data);
+    WorkerDate.push(data.value[0]);
+    QueueDate.push(data.value[0]);
 
-    statusChart.setOption({
+    WorkerChart.setOption({
         xAxis: {
-            data: statusDate
+            data: WorkerDate
         },
         series: [{
-            data: statusData
+            data: WorkerData
         }]
+    });
+
+    function queue_data(){
+        var _length = queues.length;
+        // If QueueData is empty, then create queues dict to store queue's data
+        if ($.isEmptyObject(QueueData)) {
+            for (var i = 0; i < _length; i++) {
+                QueueData[queues[i].name] = {data: []};
+                for (var n = 0; n < QueueScaleNum; n++) {
+                    QueueData[queues[i].name].data.push(null)
+                }
+            }
+        }
+
+        // Update queue's info
+        for (var i = 0; i < _length; i++){
+            QueueData[queues[i].name].data.shift();
+            QueueData[queues[i].name].data.push(queues[i].messages);
+        }
+
+        var series = [];
+        for(var i = 0; i < _length; i++){
+            var item = {
+                name: queues[i].name,
+                type: 'line',
+                data: QueueData[queues[i].name].data
+            };
+            series.push(item);
+        }
+        return series;
+    }
+
+    QueueChart.setOption({
+        xAxis: {
+            data: QueueDate
+        },
+        series: queue_data()
     });
 }
 

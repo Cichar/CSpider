@@ -1,9 +1,12 @@
 # -*- utf-8 -*-
 
+from collections import defaultdict
 from functools import partial
 
 from tornado import websocket
 from tornado.ioloop import PeriodicCallback
+
+from Service.Monitor.broker import Broker
 
 
 class MonitorUpdateHandler(websocket.WebSocketHandler):
@@ -38,12 +41,23 @@ class MonitorUpdateHandler(websocket.WebSocketHandler):
             for l in cls.listeners:
                 l.write_message(update)
 
+    @staticmethod
+    def get_queues_info(c_app=None, queues=None):
+        """ Get The Queues Info"""
+        broker_options = c_app.conf.BROKER_TRANSPORT_OPTIONS
+
+        broker = Broker(c_app.connection().as_uri(include_password=True), broker_options=broker_options)
+
+        queues_info = broker.queues(queues)
+        return queues_info
+
     @classmethod
     def monitor_update(cls, app):
         """ Create Monitor Update Info """
 
         events = app.monitor.state
-        workers = {'active': 0, 'reserved': 0}
+        queues = app.monitor.queues
+        workers = {'active': 0, 'queues': '', 'workers': defaultdict(dict)}
 
         for name, worker in events.workers.items():
             counter = events.counter[name]
@@ -53,7 +67,7 @@ class MonitorUpdateHandler(websocket.WebSocketHandler):
             succeeded = counter.get('task-succeeded', 0)
             retried = counter.get('task-retried', 0)
 
-            workers[name] = dict(
+            workers['workers'][name] = dict(
                 name=name,
                 status=worker.status_string,
                 active=active,
@@ -63,6 +77,9 @@ class MonitorUpdateHandler(websocket.WebSocketHandler):
                 retried=retried)
             if worker.status_string == 'ONLINE':
                 workers['active'] += int(active)
+
+        # Get The Queues Info
+        workers['queues'] = cls.get_queues_info(c_app=app.c_app, queues=queues)
         return workers
 
     def on_message(self, message):
