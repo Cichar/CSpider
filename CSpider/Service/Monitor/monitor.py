@@ -109,4 +109,4 @@ class Monitor(threading.Thread, BaseService):
         queues = set([])
         for q in default_queues:
             queues.add(q.name)
-        return queues
+        return sorted(queues)
