@@ -14,60 +14,11 @@ var host = $(location).attr('host'),
 /*
     EChart Initial
  */
-var WorkerData = [];
-var WorkerDate = [];
-var WorkerScaleNum = 120;
-var WorkerChart = echarts.init(document.getElementById('worker-status-chart'));
-
-for (var i = 0; i < WorkerScaleNum; i++) {
-    WorkerData.push(null);
-    WorkerDate.push('')
-}
-
-var WorkerChartOption = {
-    title: {
-        text: 'Running Task'
-    },
-    tooltip: {
-        trigger: 'axis',
-        formatter: function (data) {
-            data = data[0];
-            return data.value[0] + ' / ' + data.value[1];
-        },
-        axisPointer: {
-            animation: false
-        }
-    },
-    xAxis: {
-        type: 'category',
-        data: WorkerDate,
-        splitLine: {
-            show: false
-        },
-        axisLabel: {
-            interval: WorkerScaleNum/6
-        }
-    },
-    yAxis: {
-        type: 'value',
-        boundaryGap: [0, '50%'],
-        splitLine: {
-            show: false
-        }
-    },
-    series: [{
-        name: 'Running',
-        type: 'line',
-        showSymbol: false,
-        hoverAnimation: false,
-        data: WorkerData
-    }]
-};
-
-
 var QueueData = {};
+var QueueLegend = [];
+var LegendSelected = {};
 var QueueDate = [];
-var QueueScaleNum = 1000;
+var QueueScaleNum = 360;
 var QueueChart = echarts.init(document.getElementById('queue-status-chart'));
 
 for (var i = 0; i < QueueScaleNum; i++) {
@@ -76,7 +27,8 @@ for (var i = 0; i < QueueScaleNum; i++) {
 
 var QueueChartOption = {
     title: {
-        text: 'Queue Info'
+        text: 'Queue Info And Active Task',
+        x: 'center'
     },
     tooltip: {
         trigger: 'axis'
@@ -89,52 +41,50 @@ var QueueChartOption = {
         },
         axisLabel: {
             interval: QueueScaleNum/6
-        }
+        },
+        boundaryGap: false
     },
-    yAxis: {
-        type: 'value',
-        boundaryGap: [0, '20%'],
-        splitLine: {
-            show: false
+    yAxis: [
+        {
+            type: 'value',
+            boundaryGap: [0, '20%'],
+            splitLine: {
+                show: false
+            }
+        },
+        {
+            type: 'value',
+            boundaryGap: [0, '20%'],
+            splitLine: {
+                show: false
+            }
         }
-    },
+    ],
     series: []
 };
-
-WorkerChart.setOption(WorkerChartOption);
 QueueChart.setOption(QueueChartOption);
 
 function chart_update(active, queues) {
     var now = new Date();
-    var data = {
-        value: [
-            [now.getHours(), now.getMinutes(), now.getSeconds()].join(':'),
-            active
-        ]
-    };
-    WorkerData.shift();
-    WorkerDate.shift();
-    WorkerData.push(data);
-    WorkerDate.push(data.value[0]);
-    QueueDate.push(data.value[0]);
-
-    WorkerChart.setOption({
-        xAxis: {
-            data: WorkerDate
-        },
-        series: [{
-            data: WorkerData
-        }]
-    });
+    QueueDate.shift();
+    QueueDate.push([now.getHours(), now.getMinutes(), now.getSeconds()].join(':'));
 
     function queue_data(){
         var _length = queues.length;
+
+        if ($.isEmptyObject(QueueLegend)) {
+            for (var i = 0; i < _length; i++) {
+                QueueLegend.push(queues[i].name);
+            }
+            QueueLegend.push('Active')
+        }
+
         // If QueueData is empty, then create queues dict to store queue's data
         if ($.isEmptyObject(QueueData)) {
-            for (var i = 0; i < _length; i++) {
-                QueueData[queues[i].name] = {data: []};
+            for (var i = 0; i < QueueLegend.length; i++){
+                QueueData[QueueLegend[i]] = {data: []};
                 for (var n = 0; n < QueueScaleNum; n++) {
-                    QueueData[queues[i].name].data.push(null)
+                    QueueData[QueueLegend[i]].data.push(null)
                 }
             }
         }
@@ -143,21 +93,52 @@ function chart_update(active, queues) {
         for (var i = 0; i < _length; i++){
             QueueData[queues[i].name].data.shift();
             QueueData[queues[i].name].data.push(queues[i].messages);
+
+            // Legend Selected Depend On The Data Is Or Not Zero
+            LegendSelected[queues[i].name] = queues[i].messages;
         }
+        QueueData['Active'].data.shift();
+        QueueData['Active'].data.push(active);
 
         var series = [];
         for(var i = 0; i < _length; i++){
             var item = {
                 name: queues[i].name,
-                type: 'line',
+                type: 'bar',
                 data: QueueData[queues[i].name].data
             };
             series.push(item);
         }
+        series.push({
+            name: 'Active',
+            type: 'line',
+            yAxisIndex: 1,
+            smooth: true,
+            lineStyle: {
+                normal: {
+                    width: 1
+                }
+            },
+            smoothMonotone: 'x',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: QueueData['Active'].data
+        });
         return series;
     }
 
     QueueChart.setOption({
+        legend: {
+            top: 30,
+            formatter: function (name) {
+                return echarts.format.truncateText(name, 40, '14px Microsoft Yahei', '…');
+            },
+            tooltip: {
+                show: true
+            },
+            selected: LegendSelected,
+            data: QueueLegend
+        },
         xAxis: {
             data: QueueDate
         },
