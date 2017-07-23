@@ -27,6 +27,22 @@ class BaseHandler(tornado.web.RequestHandler):
     def db(self):
         return self.application.db
 
+    def query(self, model):
+        """ Database Query Function """
+
+        _model = self.db.session.query(model)
+        return _model
+
+    def add(self, obj):
+        """ Database Add Function """
+
+        self.db.session.add(obj)
+
+    def commit(self):
+        """ Database Commit Function """
+
+        self.db.session.commit()
+
     @property
     def spiders(self):
         return self.application.spiders
@@ -37,12 +53,6 @@ class BaseHandler(tornado.web.RequestHandler):
             pass
         finally:
             self.db.session.close()
-
-    def query(self, model):
-        """ Database Query Function """
-
-        _model = self.db.session.query(model)
-        return _model
 
 
 class ErrorHandler(tornado.web.ErrorHandler, BaseHandler):
