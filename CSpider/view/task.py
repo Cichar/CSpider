@@ -1,7 +1,9 @@
 # -*- utf-8 -*-
 
-from Utils.BaseHandle import BaseHandler
 from tornado import gen
+
+from Utils.BaseHandle import BaseHandler
+from Database.models import SpiderTask
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -33,7 +35,12 @@ class SpiderTaskHandler(BaseHandler):
         try:
             spider_dict = self.spiders[spider_name]
             form = spider_dict['form'](self.request.arguments)
-            spider_dict['spider'].task_distribute(form.data)
+
+            task = SpiderTask(name=spider_name)
+            self.add(task)
+            self.commit()
+
+            spider_dict['spider'].task_distribute(form.data, st_id=task.id)
         except Exception as err:
             print(err)
         else:
