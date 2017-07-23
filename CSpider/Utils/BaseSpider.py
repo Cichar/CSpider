@@ -22,11 +22,15 @@ class BaseSpider(object, metaclass=ABC):
     @abc.abstractmethod
     def name(self):
         """ Subclass Need To Provide Name For The Spider """
+
         return 'BaseSpider'
 
     @abc.abstractmethod
-    def task_distribute(self, data):
-        """ Subclass Need To Implement This Function To Distribute Tasks. """
+    def task_distribute(self, data, st_id=None):
+        """ Subclass Need To Implement This Function To Distribute Tasks. 
+            ''st_id'' Is The Special Arg Which Can Used By BaseTask 
+            To Update The Spider Task's Info If User Need To Update.
+        """
         pass
 
     @staticmethod
