@@ -2,10 +2,11 @@
 
 from datetime import datetime
 
-from Utils.BaseSpider import BaseSpider
-from Utils.SpiderWorkers import spider_worker
 from Database import db
 from Database.models import ZhiHuUserInfo
+from Utils.BaseSpider import BaseSpider
+from Utils.SpiderWorkers import spider_worker
+
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -33,56 +34,58 @@ class ZhiHuSpider(BaseSpider):
                         'participated_live_count,allow_message,industry_category,org_name,org_homepage,' \
                         'badge[?(type=best_answerer)].topics'
 
-    def task_distribute(self, data):
-        self.start.apply_async(kwargs={'user_token': data['target'], 'updata': False})
+    def task_distribute(self, data, st_id=None):
+        self.start.apply_async(kwargs={'user_token': data['target'], 'updata': False, 'st_id': st_id})
 
     @staticmethod
-    @spider_worker.task(rate_limit='5/m')
-    def start(user_token=None, updata=False):
+    @spider_worker.task(bind=True, rate_limit='5/m')
+    def start(base, user_token=None, updata=False, st_id=None):
         """ ZhiHuSpider Start 
-            Start User：tao-zi-de-tao
-            
+            Start User：tao-zi-de-tao 
         """
 
         try:
             if user_token:
-                user = db.session.query(ZhiHuUserInfo).filter_by(url_token=user_token).first()
+                user = base.query(ZhiHuUserInfo).filter_by(url_token=user_token).first()
                 if not user:
-                    spider_worker.send_task('Spider.Zhihu.get_user_infos',
-                                            kwargs={'user_token': user_token, 'updata': updata,
-                                                    'crawl_flag': True})
-            crawl_user = db.session.query(ZhiHuUserInfo).filter_by(crawl_flag=None or False).first()
+                    base.send_task('Spider.Zhihu.get_user_infos',
+                                   kwargs={'user_token': user_token, 'updata': updata,
+                                           'crawl_flag': True, 'st_id': st_id})
+            crawl_user = base.query(ZhiHuUserInfo).filter_by(crawl_flag=None or False).first()
             while crawl_user:
                 crawl_user.crawl_flag = True
-                db.session.commit()
-                spider_worker.send_task('Spider.Zhihu.get_user_infos',
-                                        kwargs={'user_token': crawl_user.url_token, 'updata': updata})
-                crawl_user = db.session.query(ZhiHuUserInfo).filter_by(crawl_flag=None or False).first()
+                base.commit()
+                base.send_task('Spider.Zhihu.get_user_infos',
+                               kwargs={'user_token': crawl_user.url_token,
+                                       'updata': updata, 'st_id': st_id})
+                crawl_user = base.query(ZhiHuUserInfo).filter_by(crawl_flag=None or False).first()
         except Exception as err:
-            print('** start : %s **' % str(err))
+            # print('** start : %s **' % str(err))
+            raise err
 
     @staticmethod
-    @spider_worker.task(rate_limit='5/m')
-    def get_user_infos(user_token=None, updata=False, crawl_flag=False):
+    @spider_worker.task(bind=True, rate_limit='5/m')
+    def get_user_infos(base, user_token=None, updata=False, crawl_flag=False, st_id=None):
         """ Get The User's Info 、 Followers And Following """
 
         try:
-            spider_worker.send_task('Spider.Zhihu.get_user_info',
-                                    kwargs={'user_token': user_token, 'updata': updata, 'crawl_flag': crawl_flag},
-                                    queue='short_task_1', routing_key='for_short_task_1')
-            spider_worker.send_task('Spider.Zhihu.get_user_followers',
-                                    kwargs={'user_token': user_token, 'url': None},
-                                    queue='long_task_1', routing_key='for_long_task_1')
-            spider_worker.send_task('Spider.Zhihu.get_user_following',
-                                    kwargs={'user_token': user_token, 'url': None},
-                                    queue='long_task_2', routing_key='for_long_task_2')
+            base.send_task('Spider.Zhihu.get_user_info',
+                           kwargs={'user_token': user_token, 'updata': updata,
+                                   'crawl_flag': crawl_flag, 'st_id': st_id},
+                           queue='short_task_1', routing_key='for_short_task_1')
+            base.send_task('Spider.Zhihu.get_user_followers',
+                           kwargs={'user_token': user_token, 'url': None, 'st_id': st_id},
+                           queue='long_task_1', routing_key='for_long_task_1')
+            base.send_task('Spider.Zhihu.get_user_following',
+                           kwargs={'user_token': user_token, 'url': None, 'st_id': st_id},
+                           queue='long_task_2', routing_key='for_long_task_2')
             print('Infos Tasks Send.')
         except Exception as err:
-            print('** get_user_infos : %s **' % str(err))
+            raise err
 
     @staticmethod
-    @spider_worker.task(rate_limit='40/m')
-    def get_user_info(user_token=None, updata=False, crawl_flag=False):
+    @spider_worker.task(bind=True, rate_limit='60/m')
+    def get_user_info(base, user_token=None, updata=False, crawl_flag=False, st_id=None):
         """ Get User Info
             Request URL: http://www.zhihu.com/api/v4/members/{url_token}?include={user_arg}
         """
@@ -135,7 +138,7 @@ class ZhiHuSpider(BaseSpider):
                 else:
                     company = ''
 
-                user = db.session.query(ZhiHuUserInfo).filter_by(url_token=url_token).first()
+                user = base.query(ZhiHuUserInfo).filter_by(url_token=url_token).first()
                 new_user = None
                 if updata:
                     if user:
@@ -157,9 +160,9 @@ class ZhiHuSpider(BaseSpider):
                         db.session.commit()
                         print('Update User --> %s' % name)
                         if not user.crawl_flag:
-                            spider_worker.send_task('Spider.Zhihu.get_user_infos',
-                                                    kwargs={'user_token': url_token, 'updata': True,
-                                                            'crawl_flag': True})
+                            base.send_task('Spider.Zhihu.get_user_infos',
+                                           kwargs={'user_token': url_token, 'updata': True,
+                                                   'crawl_flag': True, 'st_id': st_id})
                         return
                 if not user:
                     new_user = ZhiHuUserInfo(name=name, headline=headline, location=location, description=description,
@@ -169,22 +172,22 @@ class ZhiHuSpider(BaseSpider):
                                              follower_count=follower_count, following_count=following_count,
                                              business=business, employment=employment, company=company,
                                              update_time=datetime.utcnow(), crawl_flag=crawl_flag)
-                    db.session.add(new_user)
-                    db.session.commit()
+                    base.add(new_user)
+                    base.commit()
                     print('Create User --> %s' % name)
                     if not new_user.crawl_flag:
-                        spider_worker.send_task('Spider.Zhihu.get_user_infos',
-                                                kwargs={'user_token': url_token, 'updata': True,
-                                                        'crawl_flag': True})
+                        base.send_task('Spider.Zhihu.get_user_infos',
+                                       kwargs={'user_token': url_token, 'updata': True,
+                                               'crawl_flag': True, 'st_id': st_id})
             else:
                 print('** None User Data Was Obtained **')
             return
         except Exception as err:
-            print('** get_user_info : %s **' % str(err))
+            raise err
 
     @staticmethod
-    @spider_worker.task(rate_limit='5/m')
-    def get_user_followers(user_token=None, url=None, updata=False):
+    @spider_worker.task(bind=True, rate_limit='3/m')
+    def get_user_followers(base, user_token=None, url=None, updata=False, st_id=None):
         """ Get User's Followers
             Request URL: http://www.zhihu.com/api/v4/members/{url_token}/followers?include={follow_arg}&offset={offset}&limit={limit}
         """
@@ -203,23 +206,23 @@ class ZhiHuSpider(BaseSpider):
                     for follower in followers.get('data'):
                         url_token = follower.get('url_token', None)
                         if url_token:
-                            user = db.session.query(ZhiHuUserInfo).filter_by(url_token=url_token).first()
+                            user = base.query(ZhiHuUserInfo).filter_by(url_token=url_token).first()
                             if updata or not user:
-                                spider_worker.send_task('Spider.Zhihu.get_user_info',
-                                                        kwargs={'user_token': url_token, 'updata': updata},
-                                                        queue='short_task_1', routing_key='for_short_task_1')
+                                base.send_task('Spider.Zhihu.get_user_info',
+                                               kwargs={'user_token': url_token, 'updata': updata, 'st_id': st_id},
+                                               queue='short_task_1', routing_key='for_short_task_1')
                 if 'paging' in followers.keys() and followers.get('paging').get('is_end') is False:
                     url = followers.get('paging').get('next')
-                    spider_worker.send_task('Spider.Zhihu.get_user_followers',
-                                            kwargs={'url': url},
-                                            queue='long_task_1', routing_key='for_long_task_1')
+                    base.send_task('Spider.Zhihu.get_user_followers',
+                                   kwargs={'url': url, 'st_id': st_id},
+                                   queue='long_task_1', routing_key='for_long_task_1')
             print('Followers Task Done.')
         except Exception as err:
-            print('** get_user_followers : %s **' % str(err))
+            raise err
 
     @staticmethod
-    @spider_worker.task(rate_limit='5/m')
-    def get_user_following(user_token=None, url=None, updata=False):
+    @spider_worker.task(bind=True, rate_limit='3/m')
+    def get_user_following(base, user_token=None, url=None, updata=False, st_id=None):
         """ Get User's Following
             Request URL: https://www.zhihu.com/api/v4/members/{url_token}/followees?include={follow_arg}&offset={offset}&limit={limit}
         """
@@ -238,16 +241,16 @@ class ZhiHuSpider(BaseSpider):
                     for following in followings.get('data'):
                         url_token = following.get('url_token', None)
                         if url_token:
-                            user = db.session.query(ZhiHuUserInfo).filter_by(url_token=url_token).first()
+                            user = base.query(ZhiHuUserInfo).filter_by(url_token=url_token).first()
                             if updata or not user:
-                                spider_worker.send_task('Spider.Zhihu.get_user_info',
-                                                        kwargs={'user_token': url_token, 'updata': updata},
-                                                        queue='short_task_1', routing_key='for_short_task_1')
+                                base.send_task('Spider.Zhihu.get_user_info',
+                                               kwargs={'user_token': url_token, 'updata': updata, 'st_id': st_id},
+                                               queue='short_task_1', routing_key='for_short_task_1')
                 if 'paging' in followings.keys() and followings.get('paging').get('is_end') is False:
                     url = followings.get('paging').get('next')
-                    spider_worker.send_task('Spider.Zhihu.get_user_following',
-                                            kwargs={'url': url},
-                                            queue='long_task_2', routing_key='for_long_task_2')
+                    base.send_task('Spider.Zhihu.get_user_following',
+                                   kwargs={'url': url, 'st_id': st_id},
+                                   queue='long_task_2', routing_key='for_long_task_2')
             print('Following Task Done.')
         except Exception as err:
-            print('** get_user_follow : %s **' % str(err))
+            raise err
