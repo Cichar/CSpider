@@ -2,17 +2,28 @@
 
 from sqlalchemy import Column, String, Integer, DateTime, TEXT, Boolean
 
-from . import Base, db
+from . import Base
+
+
+class SpiderTask(Base):
+    """ Spider Task Model 
+    """
+
+    __tablename__ = 'spiderTask'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(64), default=u'未知')
+    failed = Column(Integer, default=0)
+    success = Column(Integer, default=0)
+    remain = Column(Integer, default=0)
+    status = Column(String(32), default=u'未知')
 
 
 class ZhiHuUserInfo(Base):
+    """ ZhiHu User Info Model
     """
 
-    ZhiHu User Info Model
-
-    """
-
-    __tablename__ = 'zhhuserinfos'
+    __tablename__ = 'zhHuUserInfos'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(64), default=u'未知')
