@@ -6,8 +6,8 @@ from kombu import Exchange
 
 from Conf.config import config
 
-
-spider_worker = Celery('CSpider', include=['Spider'], broker=config['default']['CELERY_BROKER_URI'])
+spider_worker = Celery('CSpider', include=['Spider', 'CommonTask'], broker=config['default']['CELERY_BROKER_URI'],
+                       task_cls='Utils.BaseTask.BaseTask')
 
 spider_worker.conf.update(
     # TimeZone
@@ -33,6 +33,7 @@ spider_worker.conf.update(
     # Task Queue
     CELERY_QUEUES=(
         Queue("default", Exchange("default", type='direct'), routing_key="for_default"),
+        Queue("common_task_1", Exchange("common_task_1", type='direct'), routing_key="for_common_task_1"),
         Queue("long_task_1", Exchange("long_task_1", type='direct'), routing_key="for_long_task_1"),
         Queue("long_task_2", Exchange("long_task_2", type='direct'), routing_key="for_long_task_2"),
         Queue("long_task_3", Exchange("long_task_3", type='direct'), routing_key="for_long_task_3"),
