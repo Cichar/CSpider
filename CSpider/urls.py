@@ -8,6 +8,7 @@ from view import task
 from view import index
 from view import spiders
 from view import monitor
+from Websocket import task as ws_task
 from Websocket import monitor as ws_monitor
 from Utils.BaseHandle import ErrorHandler
 
@@ -37,4 +38,6 @@ handlers = [
     url(r"/monitor", monitor.MonitorHandler, name="monitor"),
     # Monitor Update Websocket
     (r"/update-monitor", ws_monitor.MonitorUpdateHandler),
+    # Tasks Update Websocket
+    (r"/update-tasks", ws_task.TasksUpdateHandler),
 ]

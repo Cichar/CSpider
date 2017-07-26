@@ -2,6 +2,7 @@
 
 from tornado import gen
 
+from Database.models import SpiderTask
 from Utils.BaseHandle import BaseHandler
 
 __Author__ = 'Cichar'
@@ -13,4 +14,5 @@ __Version__ = '0.1'
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        return self.render("index.html")
+        tasks = self.query(SpiderTask).all()
+        return self.render("index.html", tasks=tasks)

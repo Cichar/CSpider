@@ -5,8 +5,34 @@
 {% end %}
 
 {% block center %}
-    <div id="main">
+    <div>
+        <table class="c-table text-center" id="tasks-table" width="100%">
+            <!-- table head -->
+            <thead>
+                <tr>
+                    <th class="col-xs-">Task Name</th>
+                    <th class="col-xs-" >Success</th>
+                    <th class="col-xs-" >Failed</th>
+                    <th class="col-xs-" >Remain</th>
+                    <th class="col-xs-" >Status</th>
+                </tr>
+            </thead>
+            <!-- /.table head  -->
 
+            <!-- table body -->
+            <tbody>
+                {% for task in tasks %}
+                    <tr id="{{ task.id }}">
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.success }}</td>
+                        <td>{{ task.failed }}</td>
+                        <td>{{ task.remain }}</td>
+                        <td>{{ task.status }}</td>
+                    </tr>
+                {% end %}
+            </tbody>
+            <!-- /.table body -->
+        </table>
     </div>
 {% end %}
 
@@ -14,4 +40,5 @@
 {% end %}
 
 {% block extra_scripts %}
+<script src="{{ static_url('js/project/index.js') }}"></script>
 {% end %}
