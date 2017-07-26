@@ -718,11 +718,11 @@ form input {
     表格样式
  */
 .c-table {
+    font-size:13px;
     position:relative;
+    background-color:#fff;
     border:1px solid rgba(0,0,0,.12);
     border-collapse:collapse;
-    font-size:13px;
-    background-color:#fff
 }
 .c-table-td {
     text-align: center;

@@ -17,7 +17,6 @@ __version__ = '0.1'
 
 
 class BaseSpider(object, metaclass=ABC):
-
     @property
     @abc.abstractmethod
     def name(self):

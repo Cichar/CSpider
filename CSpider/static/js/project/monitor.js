@@ -195,7 +195,7 @@ var workers_table = $("#workers-table").DataTable({
             targets: 6,
             data: 'processed'
         }
-        ]
+    ]
 });
 
 function workers_update(update) {

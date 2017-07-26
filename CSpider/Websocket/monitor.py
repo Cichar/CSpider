@@ -1,7 +1,7 @@
 # -*- utf-8 -*-
 
-from collections import defaultdict
 from functools import partial
+from collections import defaultdict
 
 from tornado import websocket
 from tornado.ioloop import PeriodicCallback
@@ -29,6 +29,7 @@ class MonitorUpdateHandler(websocket.WebSocketHandler):
 
     def on_close(self):
         """ Close Websocket """
+
         if self in self.listeners:
             self.listeners.remove(self)
         if not self.listeners and self.periodic_callback:
