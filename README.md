@@ -14,6 +14,9 @@ Spider with Web UI
   * Redis
   * MySQL
 
+### Task Status Monitor
+![image](https://github.com/Cichar/CSpider/blob/master/screenshots/task_update.png)
+
 ### Spider Modules(Example)
 ![image](https://github.com/Cichar/CSpider/blob/master/screenshots/spider_module.png)
 
