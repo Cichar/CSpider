@@ -18,6 +18,19 @@ class SpiderTask(Base):
     remain = Column(Integer, default=0)
     status = Column(String(32), default=u'未知')
 
+    def to_json(self):
+        """ Return Json Type """
+
+        _info = {
+            'id': self.id,
+            'name': self.name,
+            'failed': self.failed,
+            'success': self.success,
+            'remain': self.remain,
+            'status': self.status,
+        }
+        return _info
+
 
 class ZhiHuUserInfo(Base):
     """ ZhiHu User Info Model
