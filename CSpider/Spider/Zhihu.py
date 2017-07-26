@@ -38,7 +38,7 @@ class ZhiHuSpider(BaseSpider):
         self.start.apply_async(kwargs={'user_token': data['target'], 'updata': False, 'st_id': st_id})
 
     @staticmethod
-    @spider_worker.task(bind=True, rate_limit='5/m')
+    @spider_worker.task(bind=True, rate_limit='6/m')
     def start(base, user_token=None, updata=False, st_id=None):
         """ ZhiHuSpider Start 
             Start User：tao-zi-de-tao 
@@ -64,7 +64,7 @@ class ZhiHuSpider(BaseSpider):
             raise err
 
     @staticmethod
-    @spider_worker.task(bind=True, rate_limit='5/m')
+    @spider_worker.task(bind=True, rate_limit='6/m')
     def get_user_infos(base, user_token=None, updata=False, crawl_flag=False, st_id=None):
         """ Get The User's Info 、 Followers And Following """
 
@@ -84,7 +84,7 @@ class ZhiHuSpider(BaseSpider):
             raise err
 
     @staticmethod
-    @spider_worker.task(bind=True, rate_limit='60/m')
+    @spider_worker.task(bind=True, rate_limit='57/m')
     def get_user_info(base, user_token=None, updata=False, crawl_flag=False, st_id=None):
         """ Get User Info
             Request URL: http://www.zhihu.com/api/v4/members/{url_token}?include={user_arg}
@@ -186,7 +186,7 @@ class ZhiHuSpider(BaseSpider):
             raise err
 
     @staticmethod
-    @spider_worker.task(bind=True, rate_limit='3/m')
+    @spider_worker.task(bind=True, rate_limit='4/m')
     def get_user_followers(base, user_token=None, url=None, updata=False, st_id=None):
         """ Get User's Followers
             Request URL: http://www.zhihu.com/api/v4/members/{url_token}/followers?include={follow_arg}&offset={offset}&limit={limit}
@@ -221,7 +221,7 @@ class ZhiHuSpider(BaseSpider):
             raise err
 
     @staticmethod
-    @spider_worker.task(bind=True, rate_limit='3/m')
+    @spider_worker.task(bind=True, rate_limit='4/m')
     def get_user_following(base, user_token=None, url=None, updata=False, st_id=None):
         """ Get User's Following
             Request URL: https://www.zhihu.com/api/v4/members/{url_token}/followees?include={follow_arg}&offset={offset}&limit={limit}
