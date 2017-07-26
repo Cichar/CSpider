@@ -8,6 +8,9 @@ class DefaultConfig(object):
     MONITOR_EVENTS_ENABLE_INTERVAL = 5000
     MONITOR_UPDATE_INTERVAL = 5000
 
+    # Task Update Configuration
+    TASK_UPDATE_INTERVAL = 5000
+
 
 class DevelopmentConfig(DefaultConfig):
     # Database URI
@@ -41,6 +44,8 @@ def config_from_object(obj):
         if key.isupper():
             if key.startswith('MONITOR_'):
                 _config['MONITOR'][key] = getattr(obj, key)
+            elif key.startswith('TASK_'):
+                _config['TASK'][key] = getattr(obj, key)
             else:
                 _config[key] = getattr(obj, key)
     return _config
