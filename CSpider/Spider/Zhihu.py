@@ -2,7 +2,6 @@
 
 from datetime import datetime
 
-from Database import db
 from Database.models import ZhiHuUserInfo
 from Utils.BaseSpider import BaseSpider
 from Utils.SpiderWorkers import spider_worker
@@ -157,7 +156,7 @@ class ZhiHuSpider(BaseSpider):
                         user.company = company
                         user.update_time = datetime.utcnow()
                         user.crawl_flag = crawl_flag
-                        db.session.commit()
+                        base.commit()
                         print('Update User --> %s' % name)
                         if not user.crawl_flag:
                             base.send_task('Spider.Zhihu.get_user_infos',
