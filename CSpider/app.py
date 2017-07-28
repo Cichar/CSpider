@@ -15,6 +15,7 @@ from Database import db
 from Conf.config import config
 from Conf.options import default_options
 from Service.Monitor import Monitor
+from Database.models import SpiderTask
 from Utils.SpiderWorkers import spider_worker
 from Manager.SpiderManager import SpiderManager
 from Manager.ServiceManager import ServiceManager
@@ -62,6 +63,7 @@ class Application(tornado.web.Application):
         """ Server Start """
 
         try:
+            self.task_status_reset()
             self.register_service()
             tornado.options.parse_command_line()
             self.start_log_msg()
@@ -93,7 +95,7 @@ class Application(tornado.web.Application):
         self.log.info('|' + ' ' * 46 + '|')
 
         self.log.info('-' * 15 + ' AutoLoad Spiders ' + '-' * 15)
-        for _ in self.spiders:
+        for _ in sorted(self.spiders.keys()):
             self.log.info(' ' + _ + ' ' * (47 - len(_) - 16) + 'Initial Success')
         self.log.info('')
 
@@ -105,6 +107,15 @@ class Application(tornado.web.Application):
                 else:
                     self.log.info(' ' + key + ' ' * (47 - len(key) - 9) + 'No Start')
             self.log.info('-' * 48)
+
+    def task_status_reset(self):
+        """ Reset Spider Task Status When Application Start """
+
+        tasks = self.db.session.query(SpiderTask).filter_by(status='running').all()
+        if tasks:
+            for task in tasks:
+                task.status = 'stop'
+            self.db.session.commit()
 
 if __name__ == '__main__':
     Application().run()
