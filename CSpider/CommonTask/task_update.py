@@ -19,6 +19,8 @@ def task_info_update(base, st_id=None, event=None):
         elif task and event == 'success':
             task.remain -= 1
             task.success += 1
+            if task.remain <= 0:
+                task.status = 'success'
         elif task and event == 'failed':
             task.remain -= 1
             task.failed += 1
@@ -27,6 +29,6 @@ def task_info_update(base, st_id=None, event=None):
     except Exception as err:
         print(str(err))
     else:
-        if event != 'remain':
-            print('Task %s Done' % event)
+        # if event != 'remain':
+        print('Task %s Done' % event)
         base.commit()
