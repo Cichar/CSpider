@@ -22,6 +22,7 @@ class SpiderTask(Base):
         """ Return Json Type """
 
         _info = {
+            'DT_RowId': self.id,
             'id': self.id,
             'name': self.name,
             'failed': self.failed,
@@ -60,3 +61,29 @@ class ZhiHuUserInfo(Base):
 
     def __repr__(self):
         return 'ZhiHuUser %r' % self.name
+
+
+class AcFunInfo(Base):
+    """ AcFun Info Model
+    """
+
+    __tablename__ = 'AcFunInfos'
+
+    id = Column(Integer, primary_key=True)
+    source_id = Column(Integer, default=0)
+    title = Column(String(192), default=u'未知')
+    user_id = Column(Integer, default=0)
+    username = Column(String(128), default=u'未知')
+    channel = Column(String(128), default=u'未知')
+    parent_channel = Column(String(128), default=u'未知')
+    view_count = Column(Integer, default=0)
+    contribute_time = Column(DateTime())
+    comment_count = Column(Integer, default=0)
+    dan_mu_size = Column(Integer, default=0)
+    banana_count = Column(Integer, default=0)
+    favorite_count = Column(Integer, default=0)
+    year = Column(Integer, default=0)
+    month = Column(Integer, default=0)
+
+    def __repr__(self):
+        return 'AcFun Info < %r >' % self.title

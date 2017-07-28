@@ -28,3 +28,17 @@ class NetEaseMusicCloudForm(BaseForm):
         self.module.choices = [('MusicList', 'MusicList'), ('Music', 'Music'), ('Mixed Module', 'Mixed Module')]
         self.music_style.choices = [('LightMusic', 'Light Music'), ('Electronic Music', 'Electronic Music'),
                                     ('ACG Music', 'ACG Music'), ('Healing Music', 'Healing Music')]
+
+
+class AcFunForm(BaseForm):
+    """ AcFun Spider Task Form """
+    name = u'AcFun'
+
+    year = SelectField('Year', validators=[DataRequired()], coerce=int)
+    month = SelectField('Month', validators=[DataRequired()], coerce=int)
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(AcFunForm, self).__init__(*args, **kwargs)
+        self.year.choices = [(year, year) for year in range(2017, 2100)]
+        self.month.choices = [(month, month) for month in range(1, 13)]
