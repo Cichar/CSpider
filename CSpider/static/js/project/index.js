@@ -46,6 +46,9 @@ var tasks_table = $("#tasks-table").DataTable({
             render: function (data, type, full, meta) {
                 if (data === 'running') {
                     return '<span class="">Running</span>';
+                }
+                else if (data === 'success'){
+                    return '<span class="">Success</span>';
                 } else {
                     return '<span class="">Stop</span>';
                 }
