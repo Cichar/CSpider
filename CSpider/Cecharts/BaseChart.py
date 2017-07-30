@@ -1,5 +1,7 @@
 # -*- utf-8 -*-
 
+from Cecharts.decorator import check_args
+
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
 __CreateDate__ = '2017/7/29'
@@ -20,8 +22,12 @@ class BaseChart(object):
 
     FUNCTIONS = ['_add_tooltip', '_add_x_axis', '_add_y_axis', '_add_series']
 
-    def __init__(self, title, subtitle=None, toolbox=False, name='myChart',
-                 width='100%', height='400px', render_id=None):
+    @check_args
+    def __init__(self, title: str, subtitle: str=None, toolbox: bool=False, name: str='myChart',
+                 width: str='100%', height: str='400px', render_id: str=None, animation=None, animation_threshold=None,
+                 animation_duration=None, animation_easing=None, animation_delay=None, animation_duration_update=None,
+                 animation_easing_update=None, animation_delay_update=None, progressive=None,
+                 progressive_threshold=None, blend_mode=None, hover_layer_threshold=None, use_utc=None):
         """
         :param title: 
                     Chart's Title.
@@ -39,16 +45,29 @@ class BaseChart(object):
                     The Height For Render In Web Page. Default Is ''400px''.
         :param render_id: 
                     The Id For JS To Select, Then ECharts Initial The Object.
+        :param animation: 
+        :param animation_threshold: 
+        :param animation_duration: 
+        :param animation_easing: 
+        :param animation_delay: 
+        :param animation_duration_update: 
+        :param animation_easing_update: 
+        :param animation_delay_update: 
+        :param progressive: 
+        :param progressive_threshold: 
+        :param blend_mode: 
+        :param hover_layer_threshold: 
+        :param use_utc: 
         """
 
         if not name or not isinstance(name, str):
-            raise ValueError('name is required and must be string type.')
+            raise TypeError('name is required and must be string type.')
         if not render_id or not isinstance(render_id, str):
-            raise ValueError('render_id is required and must be string type.')
+            raise TypeError('render_id is required and must be string type.')
         if not width or not isinstance(width, str):
-            raise ValueError('width is required and must be string type, such as "100%" or "400px"')
+            raise TypeError('width is required and must be string type, such as "100%" or "400px"')
         if not height or not isinstance(height, str):
-            raise ValueError('height is required and must be string type, such as "20%" or "400px"')
+            raise TypeError('height is required and must be string type, such as "20%" or "400px"')
         self._name = name
         self._width = width
         self._height = height
@@ -61,6 +80,26 @@ class BaseChart(object):
         for func in self.FUNCTIONS:
             getattr(self, func)()
 
+        option = {
+            'animation': animation,
+            'animationThreshold': animation_threshold,
+            'animationDuration': animation_duration,
+            'animationEasing': animation_easing,
+            'animationDelay': animation_delay,
+            'animationDurationUpdate': animation_duration_update,
+            'animationEasingUpdate': animation_easing_update,
+            'animationDelayUpdate': animation_delay_update,
+            'progressive': progressive,
+            'progressiveThreshold': progressive_threshold,
+            'blendMode': blend_mode,
+            'hoverLayerThreshold': hover_layer_threshold,
+            'useUTC': use_utc,
+        }
+
+        for k, v in option.items():
+            if v:
+                self._option.update({k: v})
+
     def _add_title(self, title, subtitle):
         """ Add The Title And Subtitle For The Chart """
 
@@ -68,10 +107,11 @@ class BaseChart(object):
         if subtitle:
             self._option['title'].update({"subtext": subtitle})
 
+    @check_args
     def update_title(self, show=None, link=None, target=None, text_color=None, text_font_style=None,
                      text_font_weight=None, text_font_family=None, text_font_size=None,text_align=None,
                      text_base_line=None, sub_link=None, sub_target=None, sub_text_style=None,
-                     padding=None, item_gap=None, z_level=None, z=None, left=None, top=None, right=None,
+                     padding=None, item_gap=None, z_level: int=None, z=None, left=None, top=None, right=None,
                      bottom=None, background_color=None, border_color=None, border_width=None, shadow_blur=None,
                      shadow_color=None, shadow_offset_x=None, shadow_offset_y=None):
         """ Update The Title Configuration """
@@ -116,13 +156,14 @@ class BaseChart(object):
 
         self._option['legend'] = {'data': []}
 
+    @check_args
     def update_legend(self, show=None, z_level=None, z=None, left=None, top=None, right=None,
-                       bottom=None, width=None, height=None, orient=None, align=None, padding=None,
-                       item_gap=None, item_width=None, item_height=None, formatter=None, selected_mode=None,
-                       inactive_color=None, selected=None, text_color=None, text_font_style=None,
-                       text_font_weight=None, text_font_family=None, text_font_size=None, data=None,
-                       background_color=None, border_color=None, border_width=None, shadow_blur=None,
-                       shadow_color=None, shadow_offset_x=None, shadow_offset_y=None):
+                      bottom=None, width=None, height=None, orient=None, align=None, padding=None,
+                      item_gap=None, item_width=None, item_height=None, formatter=None, selected_mode=None,
+                      inactive_color=None, selected=None, text_color=None, text_font_style=None,
+                      text_font_weight=None, text_font_family=None, text_font_size=None, data=None,
+                      background_color=None, border_color=None, border_width=None, shadow_blur=None,
+                      shadow_color=None, shadow_offset_x=None, shadow_offset_y=None):
         """ Update The Legend Configuration """
 
         if not self._option.get('legend', None):
@@ -169,6 +210,12 @@ class BaseChart(object):
 
         self._update_option('legend', legend_option)
 
+    def _add_grid(self):
+        pass
+
+    def update_grid(self):
+        pass
+
     def _add_x_axis(self):
         """ Initial The xAxis Configuration """
 
@@ -185,10 +232,46 @@ class BaseChart(object):
 
         self._option['yAxis'] = []
 
-    def update_y_axis(self, _type='value'):
+    def update_y_axis(self, _type: str='value'):
         self._option['yAxis'].append({
             'type': _type
         })
+
+    def _add_polar(self):
+        pass
+
+    def update_polar(self):
+        pass
+
+    def _add_radius_axis(self):
+        pass
+
+    def update_radius_axis(self):
+        pass
+
+    def _add_angle_axis(self):
+        pass
+
+    def update_angle_axis(self):
+        pass
+
+    def _add_radar(self):
+        pass
+
+    def update_radar(self):
+        pass
+
+    def _add_data_zoom(self):
+        pass
+
+    def update_data_zoom(self):
+        pass
+
+    def _add_visual_map(self):
+        pass
+
+    def update_visual_map(self):
+        pass
 
     def _add_tooltip(self):
         """ Add The Tooltip For The Chart """
@@ -197,6 +280,12 @@ class BaseChart(object):
 
     def update_tooltip(self):
         # """ Update The Tooltip Configuration """
+        pass
+
+    def _add_axis_pointer(self):
+        pass
+
+    def update_axis_pointer(self):
         pass
 
     def _add_toolbox(self):
@@ -213,6 +302,54 @@ class BaseChart(object):
 
         self._option['toolbox'].update(kwargs)
 
+    def _add_brush(self):
+        pass
+
+    def update_brush(self):
+        pass
+
+    def _add_geo(self):
+        pass
+
+    def update_geo(self):
+        pass
+
+    def _add_parallel(self):
+        pass
+
+    def update_parallel(self):
+        pass
+
+    def _add_parallel_axis(self):
+        pass
+
+    def update_parallel_axis(self):
+        pass
+
+    def _add_single_axis(self):
+        pass
+
+    def update_single_axis(self):
+        pass
+
+    def _add_time_line(self):
+        pass
+
+    def update_time_line(self):
+        pass
+
+    def _add_graphic(self):
+        pass
+
+    def update_graphic(self):
+        pass
+
+    def _add_calendar(self):
+        pass
+
+    def update_calendar(self):
+        pass
+
     def _add_series(self):
         """ Initial The Series Configuration """
 
@@ -220,6 +357,12 @@ class BaseChart(object):
 
     def update_series(self, datas, legend=True):
         raise NotImplementedError()
+
+    def _add_text_style(self):
+        pass
+
+    def update_text_style(self):
+        pass
 
     def _update_option(self, key, option):
         """ Used To Update The Option In ''self._option[key]'' """
@@ -240,6 +383,14 @@ class BaseChart(object):
                 else:
                     self._option[key].update({k: v})
 
+    @staticmethod
+    def multiple_type_check(tuples):
+        """ Check Type """
+
+        for v, t in zip(tuples):
+            if not isinstance(v, t):
+                raise TypeError('{0} must be {1} type, get {2} type.'.format(v, t, type(v).__name__))
+
     def render(self):
         """ Render Chart """
 
@@ -251,8 +402,7 @@ class BaseChart(object):
     def __str__(self):
         return '%s' % self._option
 
-
 if __name__ == '__main__':
-    a = BaseChart('Test', render_id='test', toolbox=True)
-    a.update_title()
+    a = BaseChart('Test', subtitle='1234', render_id='test1', toolbox=True)
+    a.update_title(target='test target')
     print(a)
