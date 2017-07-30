@@ -8,7 +8,7 @@ class LineChart(BaseChart):
         if not datas or not isinstance(datas, dict):
             raise ValueError('datas is required and must be dict type. such as {"name": [14, 52, 32, 52]}')
         if legend:
-            self._update_legend(list(datas.keys()))
+            self.update_legend(data=list(datas.keys()))
         for k, v in datas.items():
             if not isinstance(k, str):
                 raise ValueError('name must be string type, get {0} type'.format(type(k).__name__))
