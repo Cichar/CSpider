@@ -3,16 +3,22 @@ Spider with Web UI
 
 ### Main Third-party Libraries
 * Python
-  * Tornado
-  * Celery
   * Redis
+  * Celery
+  * Tornado
+  * Sqlalchemy
 * JS
   * Echart
-  * DataTables
   * JQuery
+  * DataTables
 * Database
   * Redis
   * MySQL
+
+### Modules In CSpider
+* Cecharts
+
+  This Module Is Used To Pass The Rendered EChart Object To The Web. Maybe This Module Will Split From CSpider To Be Alone As A Library.
 
 ### Task Status Monitor
 ![image](https://github.com/Cichar/CSpider/blob/master/screenshots/task_update.png)
