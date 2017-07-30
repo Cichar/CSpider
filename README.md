@@ -15,6 +15,11 @@ Spider with Web UI
   * Redis
   * MySQL
 
+### Modules In CSpider
+* Cecharts
+
+  This Module Is Used To Pass The Rendered EChart Object To The Web.
+
 ### Task Status Monitor
 ![image](https://github.com/Cichar/CSpider/blob/master/screenshots/task_update.png)
 
