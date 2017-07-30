@@ -18,7 +18,7 @@ Spider with Web UI
 ### Modules In CSpider
 * Cecharts
 
-  This Module Is Used To Pass The Rendered EChart Object To The Web.
+  This Module Is Used To Pass The Rendered EChart Object To The Web. Maybe This Module Will Split From CSpider To Be Alone As A Library.
 
 ### Task Status Monitor
 ![image](https://github.com/Cichar/CSpider/blob/master/screenshots/task_update.png)
