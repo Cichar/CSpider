@@ -111,42 +111,63 @@ class BaseChart(object):
 
         self._update_option('title', title_option)
 
-    def _add_toolbox(self):
-        """ Add The Toolbox For The Chart """
-
-        self._option['toolbox'] = {"left": "right",
-                                   "feature": {
-                                                "saveAsImage": {}
-                                              }
-                                   }
-
-    def update_toolbox(self, **kwargs):
-        """ Update The Toolbox Configuration """
-
-        self._option['toolbox'].update(kwargs)
-
-    def _add_tooltip(self):
-        """ Add The Tooltip For The Chart """
-
-        self._option['tooltip'] = {'trigger': 'axis'}
-
-    def update_tooltip(self):
-        # """ Update The Tooltip Configuration """
-        pass
-
     def _add_legend(self):
         """ Add The Legend For The Chart """
 
         self._option['legend'] = {'data': []}
 
-    def _update_legend(self, data):
+    def update_legend(self, show=None, z_level=None, z=None, left=None, top=None, right=None,
+                       bottom=None, width=None, height=None, orient=None, align=None, padding=None,
+                       item_gap=None, item_width=None, item_height=None, formatter=None, selected_mode=None,
+                       inactive_color=None, selected=None, text_color=None, text_font_style=None,
+                       text_font_weight=None, text_font_family=None, text_font_size=None, data=None,
+                       background_color=None, border_color=None, border_width=None, shadow_blur=None,
+                       shadow_color=None, shadow_offset_x=None, shadow_offset_y=None):
         """ Update The Legend Configuration """
 
         if not self._option.get('legend', None):
             self._add_legend()
         if not isinstance(data, list):
             raise TypeError('data must be list type, get {0} type'.format(type(data).__name__))
-        self._option['legend']['data'].extend(data)
+
+        legend_option = {
+            'show': show,
+            'zlevel': z_level,
+            'z': z,
+            'left': left,
+            'top': top,
+            'right': right,
+            'bottom': bottom,
+            'width': width,
+            'height': height,
+            'orient': orient,
+            'align': align,
+            'padding': padding,
+            'itemGap': item_gap,
+            'itemWidth': item_width,
+            'itemHeight': item_height,
+            'formatter': formatter,
+            'selectedMode': selected_mode,
+            'inactiveColor': inactive_color,
+            'selected': selected,
+            'textStyle': {
+                'color': text_color,
+                'fontStyle': text_font_style,
+                'fontWeight': text_font_weight,
+                'fontFamily': text_font_family,
+                'fontSize': text_font_size,
+            },
+            'data': data,
+            'backgroundColor': background_color,
+            'borderColor': border_color,
+            'borderWidth': border_width,
+            'shadowBlur': shadow_blur,
+            'shadowColor': shadow_color,
+            'shadowOffsetX': shadow_offset_x,
+            'shadowOffsetY': shadow_offset_y
+        }
+
+        self._update_option('legend', legend_option)
 
     def _add_x_axis(self):
         """ Initial The xAxis Configuration """
@@ -168,6 +189,29 @@ class BaseChart(object):
         self._option['yAxis'].append({
             'type': _type
         })
+
+    def _add_tooltip(self):
+        """ Add The Tooltip For The Chart """
+
+        self._option['tooltip'] = {'trigger': 'axis'}
+
+    def update_tooltip(self):
+        # """ Update The Tooltip Configuration """
+        pass
+
+    def _add_toolbox(self):
+        """ Add The Toolbox For The Chart """
+
+        self._option['toolbox'] = {"left": "right",
+                                   "feature": {
+                                                "saveAsImage": {}
+                                              }
+                                   }
+
+    def update_toolbox(self, **kwargs):
+        """ Update The Toolbox Configuration """
+
+        self._option['toolbox'].update(kwargs)
 
     def _add_series(self):
         """ Initial The Series Configuration """
