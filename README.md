@@ -3,13 +3,14 @@ Spider with Web UI
 
 ### Main Third-party Libraries
 * Python
-  * Tornado
-  * Celery
   * Redis
+  * Celery
+  * Tornado
+  * Sqlalchemy
 * JS
   * Echart
-  * DataTables
   * JQuery
+  * DataTables
 * Database
   * Redis
   * MySQL
