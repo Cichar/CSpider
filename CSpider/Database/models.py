@@ -22,7 +22,6 @@ class SpiderTask(Base):
         """ Return Json Type """
 
         _info = {
-            'DT_RowId': self.id,
             'id': self.id,
             'name': self.name,
             'failed': self.failed,

@@ -717,6 +717,11 @@ form input {
 /*
     表格样式
  */
+.c-table-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+}
 .c-table {
     font-size:13px;
     position:relative;

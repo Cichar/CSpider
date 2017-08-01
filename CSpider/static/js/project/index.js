@@ -14,7 +14,8 @@ var host = $(location).attr('host'),
     Worker Table
  */
 var tasks_table = $("#tasks-table").DataTable({
-    'select': true,
+    "rowId": 'id',
+    "select": true,
     "paginate": false,
     "ordering": false,
     "order": [],
@@ -68,6 +69,7 @@ function tasks_update(update) {
                 tasks_table.row.add(info);
             }
         }catch (err){
+            tasks_table.row.add(info);
         }
     });
     tasks_table.draw();

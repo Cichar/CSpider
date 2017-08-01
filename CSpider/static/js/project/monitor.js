@@ -28,11 +28,15 @@ for (var i = 0; i < QueueScaleNum; i++) {
 var QueueChartOption = {
     title: {
         text: 'Queue Info And Active Task',
-        x: 'center'
+        left: 'center'
     },
     tooltip: {
         trigger: 'axis'
     },
+    toolbox: {
+                "left": "right",
+                "feature": {"saveAsImage": {}}
+            },
     xAxis: {
         type: 'category',
         data: QueueDate,
