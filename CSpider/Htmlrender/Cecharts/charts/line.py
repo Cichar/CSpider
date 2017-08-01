@@ -1,6 +1,6 @@
 # -*- utf-8 -*-
 
-from Cecharts.BaseChart import BaseChart
+from Htmlrender.Cecharts.BaseChart import BaseChart
 
 
 class LineChart(BaseChart):

@@ -1,6 +1,6 @@
 # -*- utf-8 -*-
 
-from Cecharts.decorator import check_args
+from Htmlrender.decorator import check_args
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
