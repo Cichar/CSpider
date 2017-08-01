@@ -29,7 +29,7 @@ Spider with Web UI
 ### Data Analysis(Example)
 ![image](https://github.com/Cichar/CSpider/blob/master/screenshots/analysis.png)
 
-![image](https://github.com/Cichar/CSpider/blob/master/screenshots/analysis_1.png)
+![image](https://github.com/Cichar/CSpider/blob/master/screenshots/analysis_module.png)
 
 ![image](https://github.com/Cichar/CSpider/blob/master/screenshots/data_analysis.png)
 
