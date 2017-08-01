@@ -80,7 +80,7 @@ class AcFunSpider(BaseSpider):
                                queue='short_task_2', routing_key='for_short_task_2')
 
     @staticmethod
-    @spider_worker.task(bind=True, rate_limit='15/m')
+    @spider_worker.task(bind=True, rate_limit='40/m')
     def start(base, data=None, st_id=None):
         if data['month'] < 10:
             month = '0%d' % data['month']
@@ -96,29 +96,38 @@ class AcFunSpider(BaseSpider):
                                queue='short_task_2', routing_key='for_short_task_2')
 
     @staticmethod
-    @spider_worker.task(bind=True, rate_limit='15/m')
+    @spider_worker.task(bind=True, rate_limit='40/m')
     def get_info(base, parent_channel=None, channel_url=None, page=None,
                  channel_name=None, year=None, month=None, st_id=None):
         try:
             url = channel_url + str(page)
             datas = AcFunSpider().parse_url(url=url, header='default', parse_json=True)
             for index, data in enumerate(datas['data']['data']):
-                if data['contributeTimeFormat'] >= '{0}-{1}-01 00:00:00'.format(year, month):
-                    new_source = AcFunInfo(source_id=data['id'], title=data['title'], user_id=data['userId'],
-                                           username=data['username'], channel=channel_name,
-                                           parent_channel=parent_channel, view_count=data['viewCount'],
-                                           contribute_time=data['contributeTimeFormat'],
-                                           comment_count=data['commentCount'], dan_mu_size=data['danmuSize'],
-                                           banana_count=data['bananaCount'], favorite_count=data['favoriteCount'],
-                                           year=int(year), month=int(month))
-                    base.add(new_source)
-                    base.commit()
-                    if index == len(datas) - 1:
-                        page += 1
-                        base.send_task('Spider.Acfun.get_info',
-                                       kwargs={'parent_channel': parent_channel, 'channel_url': channel_url,
-                                               'page': page, 'channel_name': channel_name, 'year': year,
-                                               'month': month, 'st_id': st_id},
-                                       queue='short_task_2', routing_key='for_short_task_2')
+                if '{0}-{1}-01 00:00:00'.format(year, month) <= data['contributeTimeFormat']:
+                    if month > 11:
+                        new_month = 12
+                        new_year = int(year) + 1
+                    else:
+                        new_month = int(month) + 1
+                        new_year = year
+                    if data['contributeTimeFormat'] <= '{0}-{1}-01 00:00:00'.format(new_year, new_month):
+                        if not base.query(AcFunInfo).filter_by(source_id=data['id']).first():
+                            new_source = AcFunInfo(source_id=data['id'], title=data['title'], user_id=data['userId'],
+                                                   username=data['username'], channel=channel_name,
+                                                   parent_channel=parent_channel, view_count=data['viewCount'],
+                                                   contribute_time=data['contributeTimeFormat'],
+                                                   comment_count=data['commentCount'], dan_mu_size=data['danmuSize'],
+                                                   banana_count=data['bananaCount'], favorite_count=data['favoriteCount'],
+                                                   year=int(year), month=int(month))
+                            base.add(new_source)
+                            base.commit()
+                            print('Add Source : %s' % data['id'])
+                        if index == len(datas) - 1:
+                            page += 1
+                            base.send_task('Spider.Acfun.get_info',
+                                           kwargs={'parent_channel': parent_channel, 'channel_url': channel_url,
+                                                   'page': page, 'channel_name': channel_name, 'year': year,
+                                                   'month': month, 'st_id': st_id},
+                                           queue='short_task_2', routing_key='for_short_task_2')
         except Exception as err:
             raise err
