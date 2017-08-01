@@ -3,6 +3,7 @@
 from Utils.BaseForm import BaseForm
 from Utils.BaseSpider import BaseSpider
 from Utils.BaseManager import BaseManager
+from Utils.BaseDataAnalysis import BaseDataAnalysis
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -13,7 +14,7 @@ __Version__ = '0.1'
 class SpiderManager(BaseManager):
     """ Spider Manager """
 
-    _dir_list = ['Spider', 'Form']
+    _dir_list = ['Spider', 'Form', 'DataAnalysis']
 
     def __init__(self):
         super().__init__()
@@ -33,8 +34,10 @@ class SpiderManager(BaseManager):
 
         spiders = {spider.name: spider for spider in BaseSpider.__subclasses__()}
         forms = {form.name: form for form in BaseForm.__subclasses__()}
+        analysis = {_analysis.name: _analysis for _analysis in BaseDataAnalysis.__subclasses__()}
 
         for spider in spiders:
-            spiders[spider] = {'spider': spiders[spider](), 'form': forms.get(spider, None)}
+            spiders[spider] = {'spider': spiders[spider](), 'form': forms.get(spider, None),
+                               'analysis': analysis.get(spider, None)}
 
         return spiders
