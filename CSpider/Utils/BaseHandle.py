@@ -23,6 +23,18 @@ class BaseHandler(tornado.web.RequestHandler):
         else:
             self.render('error\error.html', status_code=status_code)
 
+    def clear_args(self, data: dict):
+        """ Clear The Args 
+            
+            Example:
+                {'year': ['2017'], 'month': ['12']} --> {'year': '2017', 'month': '12'}
+        """
+
+        _dict = {}
+        for arg in data:
+            _dict[arg] = self.get_argument(arg)
+        return _dict
+
     @property
     def db(self):
         return self.application.db
