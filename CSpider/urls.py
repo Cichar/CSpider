@@ -4,10 +4,10 @@ import os
 
 from tornado.web import url
 
-from view import task
 from view import index
 from view import spiders
 from view import monitor
+from view import data_analysis
 from Websocket import task as ws_task
 from Websocket import monitor as ws_monitor
 from Utils.BaseHandle import ErrorHandler
@@ -33,7 +33,13 @@ handlers = [
     # Spider Modules
     url(r"/spiders", spiders.SpidersHandler, name="spiders"),
     # Spider Task
-    url(r"/spider_task/(.+)", task.SpiderTaskHandler, name="spider_task"),
+    url(r"/spider_task/(.+)", spiders.SpiderTaskHandler, name="spider_task"),
+    # Data Analysis
+    url(r"/data_analysis", data_analysis.DataAnalysisHandler, name="data_analysis"),
+    # Analysis
+    url(r"/analysis/(.+)", data_analysis.AnalysisRenderHandler, name="analysis_render"),
+    # Analysis Report
+    url(r"/analysis_report/(.+)", data_analysis.AnalysisReportHandler, name="analysis_report"),
     # Monitor
     url(r"/monitor", monitor.MonitorHandler, name="monitor"),
     # Monitor Update Websocket

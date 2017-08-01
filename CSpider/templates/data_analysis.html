@@ -1,0 +1,29 @@
+{% extends "modules/content.html" %}
+
+{% block left %}
+
+{% end %}
+
+{% block center %}
+    <div class="module-map">
+        {% for _analysis in analysis %}
+        <a class="col-md-3 col-sm-4 col-xs-6 module" href="/analysis/{{ _analysis }}">
+            <div class="module-box">
+                <span class="module-box-icon"><img src="static/img/{{ _analysis }}.png" width="50" height="50"></span>
+
+                <div class="module-box-content">
+                    <span class="module-box-title">{{ _analysis }}</span>
+                    <!--<span class="task-module-box-desc">test</span>-->
+                </div>
+                 <!--/.task-module-box-content -->
+            </div>
+        </a>
+        {% end %}
+    </div>
+{% end %}
+
+{% block right %}
+{% end %}
+
+{% block extra_scripts %}
+{% end %}
