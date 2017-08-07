@@ -1,7 +1,7 @@
 # -*- utf-8 -*-
 
 from .base_option import BaseOption
-from .text_style import TextStyle
+from .base_option import TextStyle
 from .axis_pointer import AxisPointer
 from Htmlrender.decorator import check_args
 

@@ -6,7 +6,24 @@ from options.legend import Legend
 from options.grid import Grid
 from options.x_axis import XAxis
 from options.y_axis import YAxis
-from options.text_style import TextStyle
+from options.polar import Polar
+from options.radius_axis import RadiusAxis
+from options.angle_axis import AngleAxis
+from options.radar import Radar
+from options.data_zoom import DataZoom
+from options.visual_map import VisualMap
+from options.tooltip import ToolTip
+from options.toolbox import ToolBox
+from options.brush import Brush
+from options.geo import Geo
+from options.parallel import Parallel
+from options.parallel_axis import ParallelAxis
+from options.single_axis import SingleAxis
+from options.timeline import TimeLine
+from options.graphic import Graphic
+from options.calendar import Calendar
+from options.series import Series
+from options.base_option import TextStyle
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -92,24 +109,24 @@ class BaseChart(object):
         self.grid = Grid()
         self.xAxis = XAxis()
         self.yAxis = YAxis()
-        self.polar = ''
-        self.radiusAxis = ''
-        self.angleAxis = ''
-        self.radar = ''
-        self.dataZoom = ''
-        self.visualMap = ''
-        self.tooltip = ''
+        self.polar = Polar()
+        self.radiusAxis = RadiusAxis()
+        self.angleAxis = AngleAxis()
+        self.radar = Radar()
+        self.dataZoom = DataZoom()
+        self.visualMap = VisualMap()
+        self.tooltip = ToolTip()
         self.axisPointer = ''
-        self.toolbox = ''
-        self.brush = ''
-        self.geo = ''
-        self.parallel = ''
-        self.parallelAxis = ''
-        self.singleAxis = ''
-        self.timeline = ''
-        self.graphic = ''
-        self.calendar = ''
-        self.series = ''
+        self.toolbox = ToolBox()
+        self.brush = Brush()
+        self.geo = Geo()
+        self.parallel = Parallel()
+        self.parallelAxis = ParallelAxis()
+        self.singleAxis = SingleAxis()
+        self.timeline = TimeLine()
+        self.graphic = Graphic()
+        self.calendar = Calendar()
+        self.series = Series()
         self.color = ''
         self.backgroundColor = ''
         self.textStyle = TextStyle()
@@ -157,5 +174,6 @@ if __name__ == '__main__':
     a.title.show = False
     a.title.textStyle.color = 'test'
     a.grid.tooltip.textStyle.fontSize = 12
+    a.grid.tooltip.axisPointer.crossStyle.opacity = 1
     a.textStyle.set_keys(color='2131243')
     print(a)
