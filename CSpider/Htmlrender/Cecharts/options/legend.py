@@ -2,6 +2,7 @@
 
 from .base_option import BaseOption
 from .base_option import TextStyle
+from .tooltip import ToolTip2
 from Htmlrender.decorator import check_args
 
 __Author__ = 'Cichar'
@@ -32,7 +33,7 @@ class Legend(BaseOption):
         self.inactiveColor = None
         self.selected = None
         self.textStyle = TextStyle()
-        self.tooltip = None
+        self.tooltip = ToolTip2()
         self.data = []
         self.backgroundColor = None
         self.borderColor = None
