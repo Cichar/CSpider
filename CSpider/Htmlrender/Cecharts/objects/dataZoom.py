@@ -8,7 +8,7 @@ from Htmlrender.decorator import check_args
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
-__CreateDate__ = '2017/8/7'
+__CreateDate__ = '2017/8/8'
 __Version__ = '0.1'
 
 
