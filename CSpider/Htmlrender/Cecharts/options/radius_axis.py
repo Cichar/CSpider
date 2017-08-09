@@ -7,6 +7,7 @@ from .base_option import AxisTick2
 from .base_option import AxisLabel2
 from .base_option import SplitLine2
 from .base_option import SplitArea2
+from .base_option import Data
 from .axis_pointer import AxisPointer2
 from Htmlrender.decorator import check_args
 
@@ -41,7 +42,7 @@ class RadiusAxis(BaseOption):
         self.axisLabel = AxisLabel2()
         self.splitLine = SplitLine2()
         self.splitArea = SplitArea2()
-        self.data = []
+        self.data = Data()
         self.axisPointer = AxisPointer2()
         self.zlevel = None
         self.z = None
@@ -50,7 +51,7 @@ class RadiusAxis(BaseOption):
     def set_keys(self, polar_index: int=None, _type: str=None, name: str=None, name_location: str=None, name_gap: int=None,
                  name_rotate: int=None, inverse: bool=None, boundary_gap=None, _min=None, _max=None, scale: bool=None,
                  split_num: int=None, min_interval: int=None, interval: int=None, log_base: int=None, silent: bool=None,
-                 trigger_event: bool=None, data: list=None, z_level: int=None, z: int=None):
+                 trigger_event: bool=None, z_level: int=None, z: int=None):
         self.polarIndex = polar_index
         self.type = _type
         self.name = name
@@ -68,6 +69,5 @@ class RadiusAxis(BaseOption):
         self.logBase = log_base
         self.silent = silent
         self.triggerEvent = trigger_event
-        self.data = data
         self.zlevel = z_level
         self.z = z
