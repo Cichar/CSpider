@@ -22,6 +22,9 @@ class BaseOption(object):
                 if hasattr(v, 'json'):
                     if v.json:
                         _json[k] = v.json
+                elif hasattr(v, 'array'):
+                    if v.array:
+                        _json[k] = v.array
                 else:
                     _json[k] = v
         return _json
@@ -45,14 +48,19 @@ class BaseOption2(object):
         return self.__array
 
     @check_args
-    def append(self, obj: object):
-        if hasattr(obj, 'json'):
-            self.__array.append(obj.json)
-        elif isinstance(obj, dict):
-            self.__array.append(obj)
+    def append(self, *objects: object):
+        for obj in objects:
+            if hasattr(obj, 'json'):
+                self.__array.append(obj.json)
+            elif isinstance(obj, dict):
+                self.__array.append(obj)
 
     def __str__(self):
         return str(self.__array)
+
+
+class Data(BaseOption2):
+    pass
 
 
 class TextStyle(BaseOption):
@@ -167,6 +175,18 @@ class Label(BaseOption):
         self.shadowColor = shadow_color
         self.shadowOffsetX = shadow_offset_x
         self.shadowOffsetY = shadow_offset_y
+
+
+class Label2(BaseOption):
+    """ This Class Is For Geo """
+
+    def __init__(self):
+        self.normal = Normal2()
+        self.emphasis = Emphasis2()
+
+    @check_args
+    def set_keys(self, *args, **kwargs):
+        pass
 
 
 class LineStyle(BaseOption):
@@ -461,3 +481,462 @@ class HandleStyle(BaseOption):
         self.shadowOffsetX = shadow_offset_x
         self.shadowOffsetY = shadow_offset_y
         self.opacity = opacity
+
+
+class Controller(BaseOption):
+    """ This Class Is For VisualMap Object """
+    def __init__(self):
+        self.inRange = InRange()
+        self.outOfRange = OutOfRange()
+
+    def set_keys(self, *args, **kwargs):
+        pass
+
+
+class InRange(BaseOption):
+    """ This Class Is For Controller """
+
+    def __init__(self):
+        self.symbol = None
+        self.symbolSize = None
+        self.color = None
+        self.colorAlpha = None
+        self.opacity = None
+        self.colorLightness = None
+        self.colorSaturation = None
+        self.colorHue = None
+
+    @check_args
+    def set_keys(self, symbol: list=None, symbol_size: list=None, color: list=None, color_alpha: list=None,
+                 opacity: list=None, color_lightness: list=None, color_saturation: list=None, color_hue: list=None):
+        self.symbol = symbol
+        self.symbolSize = symbol_size
+        self.color = color
+        self.colorAlpha = color_alpha
+        self.opacity = opacity
+        self.colorLightness = color_lightness
+        self.colorSaturation = color_saturation
+        self.colorHue = color_hue
+
+
+class OutOfRange(InRange):
+    """ This Class Is For Controller """
+    pass
+
+
+class InBrush(InRange):
+    """ This Class Is For Brush """
+
+
+class OutOfBrush(InRange):
+    """ This Class Is For Brush """
+
+
+class Feature(BaseOption):
+    """ This Class Is For ToolBox """
+
+    def __init__(self):
+        self.saveAsImage = SaveAsImage()
+        self.restore = Restore()
+        self.dataView = DataView()
+        self.dataZoom = DataZoom()
+        self.magicType = MagicType()
+        self.brush = Brush()
+
+    @check_args
+    def set_keys(self, *args, **kwargs):
+        pass
+
+
+class SaveAsImage(BaseOption):
+    """ This Class Is For Feature """
+
+    def __init__(self):
+        self.type = None
+        self.name = None
+        self.backgroundColor = None
+        self.excludeComponents = None
+        self.show = None
+        self.title = None
+        self.icon = None
+        self.iconStyle = IconStyle()
+        self.pixelRatio = None
+
+    @check_args
+    def set_keys(self, _type: str=None, name: str=None, background_color: str=None, exclude_components: list=None,
+                 show: bool=None, title: str=None, icon=None, pixel_ratio: int=None):
+        self.type = _type
+        self.name = name
+        self.backgroundColor = background_color
+        self.excludeComponents = exclude_components
+        self.show = show
+        self.title = title
+        self.icon = icon
+        self.pixelRatio = pixel_ratio
+
+
+class Restore(BaseOption):
+    """ This Class Is For Feature """
+
+    def __init__(self):
+        self.show = None
+        self.title = None
+        self.icon = None
+        self.iconStyle = IconStyle()
+
+    @check_args
+    def set_keys(self, show: bool=None, title: str=None, icon=None):
+        self.show = show
+        self.title = title
+        self.icon = icon
+
+
+class DataView(BaseOption):
+    """ This Class Is For Feature """
+
+    def __init__(self):
+        self.show = None
+        self.title = None
+        self.icon = None
+        self.iconStyle = IconStyle()
+        self.readOnly = None
+        self.optionToContent = None
+        self.contentToOption = None
+        self.lang = None
+        self.backgroundColor = None
+        self.textareaColor = None
+        self.textareaBorderColor = None
+        self.textColor = None
+        self.buttonColor = None
+        self.buttonTextColor = None
+
+    @check_args
+    def set_keys(self, show: bool=None, title: str=None, icon=None, read_only: bool=None, option_2_content=None,
+                 content_2_option=None, lang: list=None, background_color: str=None, text_area_color: str=None,
+                 text_area_border_color: str=None, text_color: str=None, button_color: str=None,
+                 button_text_color: str=None):
+        self.show = show
+        self.title = title
+        self.icon = icon
+        self.readOnly = read_only
+        self.optionToContent = option_2_content
+        self.contentToOption = content_2_option
+        self.lang = lang
+        self.backgroundColor = background_color
+        self.textareaColor = text_area_color
+        self.textareaBorderColor = text_area_border_color
+        self.textColor = text_color
+        self.buttonColor = button_color
+        self.buttonTextColor = button_text_color
+
+
+class DataZoom(BaseOption):
+    """ This Class Is For Feature """
+
+    def __init__(self):
+        self.show = None
+        self.title = Title()
+        self.icon = Icon()
+        self.iconStyle = IconStyle()
+        self.xAxisIndex = None
+        self.yAxisIndex = None
+
+    @check_args
+    def set_keys(self, show: bool=None, x_axis_index=None, y_axis_index=None):
+        self.show = show
+        self.xAxisIndex = x_axis_index
+        self.yAxisIndex = y_axis_index
+
+
+class Title(BaseOption):
+    """ This Class Is For DataZoom """
+
+    def __init__(self):
+        self.zoom = None
+        self.back = None
+
+    @check_args
+    def set_keys(self, zoom: str=None, back: str=None):
+        self.zoom = zoom
+        self.back = back
+
+
+class Title2(BaseOption):
+    """ This Class Is For MagicType """
+
+    def __init__(self):
+        self.line = None
+        self.bar = None
+        self.stack = None
+        self.tiled = None
+
+    @check_args
+    def set_keys(self, line: str=None, bar: str=None, stack: str=None, tiled: str=None):
+        self.line = line
+        self.bar = bar
+        self.stack = stack
+        self.tiled = tiled
+
+
+class Title3(BaseOption):
+    """ This Class Is For Brush """
+
+    def __init__(self):
+        self.rect = None
+        self.polygon = None
+        self.lineX = None
+        self.lineY = None
+        self.keep = None
+        self.clear = None
+
+    @check_args
+    def set_keys(self, rect: str=None, polygon: str=None, line_x: str=None, line_y: str=None,
+                 keep: str=None, clear: str=None):
+        self.rect = rect
+        self.polygon = polygon
+        self.lineX = line_x
+        self.lineY = line_y
+        self.keep = keep
+        self.clear = clear
+
+
+class Icon(Title):
+    """ This Class Is For DataZoom """
+    pass
+
+
+class Icon2(Title2):
+    """ This Class Is For MagicType """
+    pass
+
+
+class Icon3(Title3):
+    """ This Class Is For Brush """
+    pass
+
+
+class MagicType(BaseOption):
+    """ This Class Is For Feature 
+        option and seriesIndex is not need to change,
+        so this class not provide option and seriesIndex.
+    """
+
+    def __init__(self):
+        self.show = None
+        self.type = None
+        self.title = Title2()
+        self.icon = Icon2()
+        self.iconStyle = IconStyle()
+
+    @check_args
+    def set_keys(self, show: bool=None, _type: list=None):
+        self.show = show
+        self.type = _type
+
+
+class Brush(BaseOption):
+    """ This Class Is For Feature """
+
+    def __init__(self):
+        self.type = None
+        self.icon = Icon3()
+        self.title = Title3()
+
+    @check_args
+    def set_keys(self, _type: list=None):
+        self.type = _type
+
+
+class IconStyle(BaseOption):
+    """ This Class Is For ToolBox """
+
+    def __init__(self):
+        self.normal = Normal()
+        self.emphasis = Emphasis()
+
+    def set_keys(self, *args, **kwargs):
+        pass
+
+
+class ItemStyle(BaseOption):
+    """ This Class Is For Geo """
+
+    def __init__(self):
+        self.normal = Emphasis()
+        self.emphasis = Emphasis()
+
+    def set_keys(self, *args, **kwargs):
+        pass
+
+
+class ItemStyle2(BaseOption):
+    """ This Class Is For Region Object """
+
+    def __init__(self):
+        self.normal = Normal3()
+        self.emphasis = Emphasis3()
+
+    def set_keys(self, *args, **kwargs):
+        pass
+
+
+class Emphasis(BaseOption):
+    """ This Class Is For IconStyle """
+
+    def __init__(self):
+        self.color = None
+        self.borderColor = None
+        self.borderWidth = None
+        self.borderType = None
+        self.shadowBlur = None
+        self.shadowColor = None
+        self.shadowOffsetX = None
+        self.shadowOffsetY = None
+        self.opacity = None
+
+    @check_args
+    def set_keys(self, color: str=None, border_color: str=None, border_width: int=None, border_type: str=None,
+                 shadow_blur: int=None, shadow_color: str=None, shadow_offset_x: int=None, shadow_offset_y: int=None,
+                 opacity: int=None):
+        self.color = color
+        self.borderColor = border_color
+        self.borderWidth = border_width
+        self.borderType = border_type
+        self.shadowBlur = shadow_blur
+        self.shadowColor = shadow_color
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.opacity = opacity
+
+
+class Emphasis2(BaseOption):
+    """ This Class Is For Label2 """
+
+    def __init__(self):
+        self.show = None
+        self.textStyle = TextStyle()
+
+    @check_args
+    def set_keys(self, show: bool=None):
+        self.show = show
+
+
+class Emphasis3(Emphasis):
+    """ This Class Is For Region Object """
+
+    def __init__(self):
+        super().__init__()
+        self.areaColor = None
+
+    @check_args
+    def set_keys(self, area_color: str=None, color: str=None, border_color: str=None, border_width: int=None,
+                 border_type: str=None, shadow_blur: int=None, shadow_color: str=None, shadow_offset_x: int=None,
+                 shadow_offset_y: int=None, opacity: int=None):
+        self.color = color
+        self.borderColor = border_color
+        self.borderWidth = border_width
+        self.borderType = border_type
+        self.shadowBlur = shadow_blur
+        self.shadowColor = shadow_color
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.opacity = opacity
+        self.areaColor = area_color
+
+
+class Normal(Emphasis):
+    """ This Class Is For IconStyle """
+
+    def __init__(self):
+        super().__init__()
+        self.textPosition = None
+        self.textAlign = None
+
+    @check_args
+    def set_keys(self, color: str = None, border_color: str = None, border_width: int = None, border_type: str = None,
+                 shadow_blur: int = None, shadow_color: str = None, shadow_offset_x: int = None,
+                 shadow_offset_y: int = None, opacity: int = None, text_position: str=None, text_align: str=None):
+        self.color = color
+        self.borderColor = border_color
+        self.borderWidth = border_width
+        self.borderType = border_type
+        self.shadowBlur = shadow_blur
+        self.shadowColor = shadow_color
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.opacity = opacity
+        self.textPosition = text_position
+        self.textAlign = text_align
+
+
+class Normal2(Emphasis2):
+    """ This Class Is For Label2 """
+    pass
+
+
+class Normal3(Emphasis3):
+    """ This Class Is For Region Object """
+
+
+class ScaleLimit(BaseOption):
+    def __init__(self):
+        self.min = None
+        self.max = None
+
+    @check_args
+    def set_keys(self, _min: int=None, _max: int=None):
+        self.min = _min
+        self.max = _max
+
+
+class Regions(BaseOption2):
+    pass
+
+
+class ParallelAxisDefault(BaseOption):
+    """ This Class Is For Parallel """
+
+    def __init__(self):
+        self.type = None
+        self.name = None
+        self.nameLocation = None
+        self.nameTextStyle = TextStyle()
+        self.nameGap = None
+        self.nameRotate = None
+        self.inverse = None
+        self.boundaryGap = None
+        self.min = None
+        self.max = None
+        self.scale = None
+        self.splitNumber = None
+        self.minInterval = None
+        self.interval = None
+        self.logBase = None
+        self.silent = None
+        self.triggerEvent = None
+        self.axisLine = AxisLine()
+        self.axisTick = AxisTick2()
+        self.axisLabel = AxisLabel2()
+        self.data = Data()
+
+    @check_args
+    def set_keys(self, _type: str=None, name: str=None, name_location: str=None, name_gap: int=None,
+                 name_rotate: int=None, inverse: bool=None, boundary_gap=None, _min=None, _max=None,
+                 scale: bool=None, split_num: int=None, min_interval: int=None, interval: int=None,
+                 log_base: int=None, silent: bool=None, trigger_event: bool=None):
+        self.type = _type
+        self.name = name
+        self.nameLocation = name_location
+        self.nameGap = name_gap
+        self.nameRotate = name_rotate
+        self.inverse = inverse
+        self.boundaryGap = boundary_gap
+        self.min = _min
+        self.max = _max
+        self.scale = scale
+        self.splitNumber = split_num
+        self.minInterval = min_interval
+        self.interval = interval
+        self.logBase = log_base
+        self.silent = silent
+        self.triggerEvent = trigger_event
