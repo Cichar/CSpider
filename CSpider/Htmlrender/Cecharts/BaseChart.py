@@ -1,29 +1,35 @@
 # -*- utf-8 -*-
 
 from Htmlrender.decorator import check_args
-from options.title import Title
-from options.legend import Legend
-from options.grid import Grid
-from options.x_axis import XAxis
-from options.y_axis import YAxis
-from options.polar import Polar
-from options.radius_axis import RadiusAxis
-from options.angle_axis import AngleAxis
-from options.radar import Radar
-from options.data_zoom import DataZoom
-from options.visual_map import VisualMap
-from options.tooltip import ToolTip
-from options.toolbox import ToolBox
-from options.brush import Brush
-from options.geo import Geo
-from options.parallel import Parallel
-from options.parallel_axis import ParallelAxis
-from options.single_axis import SingleAxis
-from options.timeline import TimeLine
-from options.graphic import Graphic
-from options.calendar import Calendar
-from options.series import Series
-from options.base_option import TextStyle
+
+from Htmlrender.Cecharts.options.geo import Geo
+from Htmlrender.Cecharts.options.grid import Grid
+from Htmlrender.Cecharts.options.title import Title
+from Htmlrender.Cecharts.options.polar import Polar
+from Htmlrender.Cecharts.options.radar import Radar
+from Htmlrender.Cecharts.options.brush import Brush
+from Htmlrender.Cecharts.options.x_axis import XAxis
+from Htmlrender.Cecharts.options.y_axis import YAxis
+from Htmlrender.Cecharts.options.series import Series
+from Htmlrender.Cecharts.options.legend import Legend
+from Htmlrender.Cecharts.options.graphic import Graphic
+from Htmlrender.Cecharts.options.toolbox import ToolBox
+from Htmlrender.Cecharts.options.tooltip import ToolTip2
+from Htmlrender.Cecharts.options.calendar import Calendar
+from Htmlrender.Cecharts.options.parallel import Parallel
+from Htmlrender.Cecharts.options.timeline import TimeLine
+from Htmlrender.Cecharts.options.data_zoom import DataZoom
+from Htmlrender.Cecharts.options.angle_axis import AngleAxis
+from Htmlrender.Cecharts.options.visual_map import VisualMap
+from Htmlrender.Cecharts.options.base_option import TextStyle
+from Htmlrender.Cecharts.options.radius_axis import RadiusAxis
+from Htmlrender.Cecharts.options.single_axis import SingleAxis
+from Htmlrender.Cecharts.options.axis_pointer import AxisPointer3
+from Htmlrender.Cecharts.options.parallel_axis import ParallelAxis
+
+from Htmlrender.Cecharts.objects.dataZoom import Slider
+from Htmlrender.Cecharts.objects.Geo import Region
+from Htmlrender.Cecharts.objects.visualMap import Continuous
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -115,9 +121,13 @@ class BaseChart(object):
         self.radar = Radar()
         self.dataZoom = DataZoom()
         self.visualMap = VisualMap()
-        self.tooltip = ToolTip()
-        self.axisPointer = ''
+        self.tooltip = ToolTip2()
+        self.axisPointer = AxisPointer3()
         self.toolbox = ToolBox()
+        if toolbox:
+            self.toolbox.show = True
+        else:
+            self.toolbox.show = False
         self.brush = Brush()
         self.geo = Geo()
         self.parallel = Parallel()
@@ -153,7 +163,13 @@ class BaseChart(object):
             obj = getattr(self, field)
             if hasattr(obj, 'json'):
                 if obj.json:
-                    _option[field] = obj.json
+                    if callable(obj.json):
+                        _option[field] = obj.json()
+                    else:
+                        _option[field] = obj.json
+            elif hasattr(obj, 'array'):
+                if obj.array:
+                    _option[field] = obj.array
             else:
                 if obj:
                     _option[field] = obj
@@ -175,5 +191,14 @@ if __name__ == '__main__':
     a.title.textStyle.color = 'test'
     a.grid.tooltip.textStyle.fontSize = 12
     a.grid.tooltip.axisPointer.crossStyle.opacity = 1
-    a.textStyle.set_keys(color='2131243')
+    a.xAxis.axisLabel.textStyle.set_keys(color='black')
+    a.toolbox.feature.dataZoom.iconStyle.normal.color = 'test color'
+    a.textStyle.set_keys()
+    a.dataZoom.append(Slider())
+    b = Continuous()
+    b.controller.inRange.set_keys(symbol_size=[1, 3])
+    a.visualMap.append(b)
+    d = Region()
+    d.itemStyle.normal.color = 'test'
+    a.geo.regions.append(d)
     print(a)
