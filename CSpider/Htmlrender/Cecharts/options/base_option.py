@@ -54,6 +54,9 @@ class BaseOption2(object):
                 self.__array.append(obj.json)
             elif isinstance(obj, dict):
                 self.__array.append(obj)
+            elif isinstance(obj, list):
+                for _ in obj:
+                    self.__array.append(_)
 
     def __str__(self):
         return str(self.__array)
@@ -189,6 +192,17 @@ class Label2(BaseOption):
         pass
 
 
+class Label3(BaseOption):
+    """ This Class Is For Timeline """
+
+    def __init__(self):
+        self.normal = Normal4()
+        self.emphasis = Emphasis4()
+
+    def set_keys(self, *args, **kwargs):
+        pass
+
+
 class LineStyle(BaseOption):
     def __init__(self):
         self.color = None
@@ -219,6 +233,28 @@ class LineStyle2(LineStyle):
     @check_args
     def set_keys(self, color=None, width: int=None, _type: str=None, shadow_blur: int=None,
                  shadow_color: str=None, shadow_offset_x: int=None, shadow_offset_y: int=None, opacity: int=None):
+        self.color = color
+        self.width = width
+        self.type = _type
+        self.shadowBlur = shadow_blur
+        self.shadowColor = shadow_color
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.opacity = opacity
+
+
+class LineStyle3(LineStyle):
+    """ This Class Is For Timeline """
+
+    def __init__(self):
+        super().__init__()
+        self.show = None
+
+    @check_args
+    def set_keys(self, show: bool=None, color: str = None, width: int = None, _type: str = None,
+                 shadow_blur: int = None, shadow_color: str = None, shadow_offset_x: int = None,
+                 shadow_offset_y: int = None, opacity: int = None):
+        self.show = show
         self.color = color
         self.width = width
         self.type = _type
@@ -844,6 +880,39 @@ class Emphasis3(Emphasis):
         self.areaColor = area_color
 
 
+class Emphasis4(BaseOption):
+    """ This Class Is For Label3 """
+
+    def __init__(self):
+        self.show = None
+        self.interval = None
+        self.rotate = None
+        self.formatter = None
+        self.textStyle = TextStyle2()
+
+    @check_args
+    def set_keys(self, show: bool=None, interval=None, rotate=None, formatter=None):
+        self.show = show
+        self.interval = interval
+        self.rotate = rotate
+        self.formatter = formatter
+
+
+class Emphasis5(BaseOption):
+    """ This Class Is For ControlStyle """
+
+    def __init__(self):
+        self.color = None
+        self.borderColor = None
+        self.borderWidth = None
+
+    @check_args
+    def set_keys(self, color: str=None, border_color: str=None, border_width: int=None):
+        self.color = color
+        self.borderColor = border_color
+        self.borderWidth = border_width
+
+
 class Normal(Emphasis):
     """ This Class Is For IconStyle """
 
@@ -876,6 +945,30 @@ class Normal2(Emphasis2):
 
 class Normal3(Emphasis3):
     """ This Class Is For Region Object """
+
+
+class Normal4(BaseOption):
+    """ This Class Is For Label3 """
+
+    def __init__(self):
+        self.position = None
+        self.show = None
+        self.interval = None
+        self.rotate = None
+        self.formatter = None
+        self.textStyle = TextStyle2()
+
+    @check_args
+    def set_keys(self, position=None, show: bool=None, interval=None, rotate=None, formatter=None):
+        self.position = position
+        self.show = show
+        self.interval = interval
+        self.rotate = rotate
+        self.formatter = formatter
+
+
+class Normal5(Emphasis5):
+    """ This Class Is For ControlStyle """
 
 
 class ScaleLimit(BaseOption):
@@ -940,3 +1033,89 @@ class ParallelAxisDefault(BaseOption):
         self.logBase = log_base
         self.silent = silent
         self.triggerEvent = trigger_event
+
+
+class AreaSelectStyle(BaseOption):
+    """ This Class Is For ParallelAxis """
+
+    def __init__(self):
+        self.width = None
+        self.borderWidth = None
+        self.borderColor = None
+        self.color = None
+        self.opacity = None
+
+    @check_args
+    def set_keys(self, width: int=None, border_width: int=None, border_color: str=None,
+                 color: str=None, opacity: int=None):
+        self.width = width
+        self.borderWidth = border_width
+        self.borderColor = border_color
+        self.color = color
+        self.opacity = opacity
+
+
+class CheckPointStyle(BaseOption):
+    """ This Class Is For Timeline """
+
+    def __init__(self):
+        self.symbol = None
+        self.symbolSize = None
+        self.symbolRotate = None
+        self.symbolOffset = None
+        self.color = None
+        self.borderWidth = None
+        self.borderColor = None
+        self.animation = None
+        self.animationDuration = None
+        self.animationEasing = None
+
+    @check_args
+    def set_keys(self, symbol: str=None, symbol_size=None, symbol_rotate: int=None, symbol_offset: list=None,
+                 color: str=None, border_width: int=None, border_color: str=None, animation: bool=None,
+                 animation_duration: int=None, animation_easing: str=None):
+        self.symbol = symbol
+        self.symbolSize = symbol_size
+        self.symbolRotate = symbol_rotate
+        self.symbolOffset = symbol_offset
+        self.color = color
+        self.borderWidth = border_width
+        self.borderColor = border_color
+        self.animation = animation
+        self.animationDuration = animation_duration
+        self.animationEasing = animation_easing
+
+
+class ControlStyle(BaseOption):
+    """ This Class Is For Timeline """
+
+    def __init__(self):
+        self.show = None
+        self.showPlayBtn = None
+        self.showPrevBtn = None
+        self.showNextBtn = None
+        self.itemSize = None
+        self.itemGap = None
+        self.position = None
+        self.playIcon = None
+        self.stopIcon = None
+        self.prevIcon = None
+        self.nextIcon = None
+        self.normal = Normal5()
+        self.emphasis = Emphasis5()
+
+    @check_args
+    def set_keys(self, show: bool=None, show_play_btn: bool=None, show_prev_btn: bool=None,
+                 show_next_btn: bool=None, item_size: int=None, item_gap: int=None, position: str=None,
+                 play_icon: str=None, stop_icon: str=None, prev_icon: str=None, next_icon: str=None):
+        self.show = show
+        self.showPlayBtn = show_play_btn
+        self.showPrevBtn = show_prev_btn
+        self.showNextBtn = show_next_btn
+        self.itemSize = item_size
+        self.itemGap = item_gap
+        self.position = position
+        self.playIcon = play_icon
+        self.stopIcon = stop_icon
+        self.prevIcon = prev_icon
+        self.nextIcon = next_icon
