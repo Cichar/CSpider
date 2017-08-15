@@ -1119,3 +1119,255 @@ class ControlStyle(BaseOption):
         self.stopIcon = stop_icon
         self.prevIcon = prev_icon
         self.nextIcon = next_icon
+
+
+class GraphicStyle(BaseOption):
+    def __init__(self):
+        self.x = None
+        self.y = None
+        self.fill = None
+        self.stroke = None
+        self.lineWidth = None
+        self.shadowBlur = None
+        self.shadowOffsetX = None
+        self.shadowOffsetY = None
+        self.shadowColor = None
+
+    @check_args
+    def set_keys(self, x: int=None, y: int=None, fill: str=None, stroke: str=None, line_width: int=None,
+                 shadow_blur: int=None, shadow_offset_x: int=None, shadow_offset_y: int=None, shadow_color: int=None):
+        self.x = x
+        self.y = y
+        self.fill = fill
+        self.stroke = stroke
+        self.lineWidth = line_width
+        self.shadowBlur = shadow_blur
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.shadowColor = shadow_color
+
+
+class GraphicImageStyle(GraphicStyle):
+    def __init__(self):
+        super().__init__()
+        self.image = None
+        self.width = None
+        self.height = None
+
+    @check_args
+    def set_keys(self, image: str=None, x: int=None, y: int=None, width: int=None, height: int=None,
+                 fill: str=None, stroke: str=None, line_width: int=None, shadow_blur: int=None,
+                 shadow_offset_x: int=None, shadow_offset_y: int=None, shadow_color: int=None):
+        self.image = image
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.fill = fill
+        self.stroke = stroke
+        self.lineWidth = line_width
+        self.shadowBlur = shadow_blur
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.shadowColor = shadow_color
+
+
+class GraphicTextStyle(GraphicStyle):
+    def __init__(self):
+        super().__init__()
+        self.text = None
+        self.font = None
+        self.textAlign = None
+        self.textVerticalAlign = None
+
+    @check_args
+    def set_keys(self, x: int=None, y: int=None, fill: str=None, stroke: str=None, line_width: int=None,
+                 shadow_blur: int=None, shadow_offset_x: int=None, shadow_offset_y: int=None, shadow_color: int=None,
+                 text: str=None, font: str=None, text_align: str=None, text_vertical_align: str=None):
+        self.x = x
+        self.y = y
+        self.fill = fill
+        self.stroke = stroke
+        self.lineWidth = line_width
+        self.shadowBlur = shadow_blur
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.shadowColor = shadow_color
+        self.text = text
+        self.font = font
+        self.textAlign = text_align
+        self.textVerticalAlign = text_vertical_align
+
+
+class GraphicRectStyle(BaseOption):
+    def __init__(self):
+        self.fill = None
+        self.stroke = None
+        self.lineWidth = None
+        self.shadowBlur = None
+        self.shadowOffsetX = None
+        self.shadowOffsetY = None
+        self.shadowColor = None
+
+    @check_args
+    def set_keys(self, fill: str=None, stroke: str=None, line_width: int=None,
+                 shadow_blur: int=None, shadow_offset_x: int=None, shadow_offset_y: int=None, shadow_color: int=None):
+        self.fill = fill
+        self.stroke = stroke
+        self.lineWidth = line_width
+        self.shadowBlur = shadow_blur
+        self.shadowOffsetX = shadow_offset_x
+        self.shadowOffsetY = shadow_offset_y
+        self.shadowColor = shadow_color
+
+
+class GraphicCircleStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicRingStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicSectorStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicArcStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicPolygonStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicPolyLineStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicLineStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicBezierCurveStyle(GraphicRectStyle):
+    pass
+
+
+class GraphicRectShape(BaseOption):
+    def __init__(self):
+        self.x = None
+        self.y = None
+        self.width = None
+        self.height = None
+
+    @check_args
+    def set_keys(self, x: int=None, y: int=None, width: int=None, height: int=None):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+
+class GraphicCircleShape(BaseOption):
+    def __init__(self):
+        self.cx = None
+        self.cy = None
+        self.r = None
+
+    @check_args
+    def set_keys(self, cx: int=None, cy: int=None, r: int=None):
+        self.cx = cx
+        self.cy = cy
+        self.r = r
+
+
+class GraphicRingShape(GraphicCircleShape):
+    def __init__(self):
+        super().__init__()
+        self.r0 = None
+
+    @check_args
+    def set_keys(self, cx: int=None, cy: int=None, r: int=None, r0: int=None):
+        self.cx = cx
+        self.cy = cy
+        self.r = r
+        self.r0 = r0
+
+
+class GraphicSectorShape(GraphicRingShape):
+    def __init__(self):
+        super().__init__()
+        self.startAngle = None
+        self.endAngle = None
+        self.clockwise = None
+
+    @check_args
+    def set_keys(self, cx: int=None, cy: int=None, r: int=None, r0: int=None, start_angle: int=None,
+                 end_angle: int=None, clock_wise: bool=None):
+        self.cx = cx
+        self.cy = cy
+        self.r = r
+        self.r0 = r0
+        self.startAngle = start_angle
+        self.endAngle = end_angle
+        self.clockwise = clock_wise
+
+
+class GraphicArcShape(GraphicSectorShape):
+    pass
+
+
+class GraphicPolygonShape(BaseOption):
+    def __init__(self):
+        self.points = None
+        self.smooth = None
+        self.smoothConstraint = None
+
+    @check_args
+    def set_keys(self, points: list=None, smooth=None, smooth_constraint: bool=None):
+        self.points = points
+        self.smooth = smooth
+        self.smoothConstraint = smooth_constraint
+
+
+class GraphicPolyLineShape(GraphicPolygonShape):
+    pass
+
+
+class GraphicLineShape(BaseOption):
+    def __init__(self):
+        self.x1 = None
+        self.y1 = None
+        self.x2 = None
+        self.y2 = None
+        self.percent = None
+
+    @check_args
+    def set_keys(self, x1: int=None, y1: int=None, x2: int=None, y2: int=None, percent: int=None):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+        self.percent = percent
+
+
+class GraphicBezierCurveShape(GraphicLineShape):
+    def __init__(self):
+        super().__init__()
+        self.cpx1 = None
+        self.cpy1 = None
+        self.cpx2 = None
+        self.cpy2 = None
+
+    @check_args
+    def set_keys(self, x1: int=None, y1: int=None, x2: int=None, y2: int=None, percent: int=None, cpx1: int=None,
+                 cpy1: int=None, cpx2: int=None, cpy2: int=None, ):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+        self.percent = percent
+        self.cpx1 = cpx1
+        self.cpy1 = cpy1
+        self.cpx2 = cpx2
+        self.cpy2 = cpy2
