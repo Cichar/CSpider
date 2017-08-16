@@ -27,9 +27,7 @@ from Htmlrender.Cecharts.options.single_axis import SingleAxis
 from Htmlrender.Cecharts.options.axis_pointer import AxisPointer3
 from Htmlrender.Cecharts.options.parallel_axis import ParallelAxis
 
-from Htmlrender.Cecharts.objects.dataZoom import Slider
-from Htmlrender.Cecharts.objects.Geo import Region
-from Htmlrender.Cecharts.objects.visualMap import Continuous
+from Htmlrender.Cecharts.BaseRender import RENDER_TO_WEB
 
 __Author__ = 'Cichar'
 __Email__ = '363655056@qq.com'
@@ -48,30 +46,21 @@ class BaseChart(object):
                'animationEasingUpdate', 'animationDelayUpdate', 'progressive', 'progressiveThreshold',
                'blendMode', 'hoverLayerThreshold', 'useUTC']
 
-    RENDER_HTML = """
-                     <div id="{render_id}" style="width:{width};height:{height};"></div> 
-                     <script type="text/javascript"> 
-                        var {name} = echarts.init(document.getElementById('{render_id}'));
-                        var option = {option}; 
-                        {name}.setOption(option); 
-                     </script>
-                  """
-
     @check_args
-    def __init__(self, title: str, subtitle: str = None, toolbox: bool = False, name: str = 'myChart',
-                 width: str = '100%', height: str = '400px', render_id: str = None, animation: bool = False,
-                 animation_threshold: int = None, animation_duration: int = None, animation_easing: str = None,
-                 animation_delay: int = None, animation_duration_update: int = None,
-                 animation_easing_update: str = None, animation_delay_update: int = None, progressive: int = None,
-                 progressive_threshold: int = None, blend_mode: str = None, hover_layer_threshold: int = None,
-                 use_utc: bool = None):
+    def __init__(self, title: str, subtitle: str = None, toolbox: bool = True, name: str = 'myChart',
+                 width: str = '100%', height: str = '400px', render_id: str = None, color: list=None,
+                 background_color=None, animation: bool = False, animation_threshold: int = None,
+                 animation_duration: int = None, animation_easing: str = None, animation_delay: int = None,
+                 animation_duration_update: int = None, animation_easing_update: str = None,
+                 animation_delay_update: int = None, progressive: int = None,  progressive_threshold: int = None,
+                 blend_mode: str = None, hover_layer_threshold: int = None, use_utc: bool = None):
         """
         :param title: 
                     Chart's Title.
         :param subtitle: 
                     Charts's subtitle.
         :param toolbox: 
-                    Show Or Not Show Chart's Toolbox. Default Is ''False''.
+                    Show Or Not Show Chart's Toolbox. Default Is ''True''.
         :param name: 
                     The Name For Render In Web Page. Default Is ''myChart''.
                     User Need To Provide Another Name To Support When The 
@@ -83,18 +72,59 @@ class BaseChart(object):
         :param render_id: 
                     The Id For JS To Select, Then ECharts Initial The Object.
         :param animation: 
+                    Whether to enable animation.
         :param animation_threshold: 
+                    Whether to set graphic number threshold to animation. 
+                    Animation will be disabled when graphic number is larger than threshold.
         :param animation_duration: 
+                    Duration of the first animation, which supports callback function for 
+                    different data to have different animation effect:
+                        animationDuration: function (idx) {
+                            // delay for later data is larger
+                            return idx * 100;
+                        }
         :param animation_easing: 
+                    Easing method used for the first animation. 
+                    Varied easing effects can be found at easing effect example.
         :param animation_delay: 
+                    Delay before updating the first animation,  which supports callback 
+                    function for different data to have different animation effect.
+                    For example:
+                        animationDelay: function (idx) {
+                            // delay for later data is larger
+                            return idx * 100;
+                        }
         :param animation_duration_update: 
+                    Time for animation to complete, which supports callback function 
+                    for different data to have different animation effect:
+                        animationDurationUpdate: function (idx) {
+                            // delay for later data is larger
+                            return idx * 100;
+                        }
         :param animation_easing_update: 
+                    Easing method used for animation.
         :param animation_delay_update: 
+                    Delay before updating animation, which supports callback function for 
+                    different data to have different animation effect.
+                    For example:
+                        animationDelayUpdate: function (idx) {
+                            // delay for later data is larger
+                            return idx * 100;
+                        }
         :param progressive: 
+                    pass
         :param progressive_threshold: 
-        :param blend_mode: 
-        :param hover_layer_threshold: 
+                    pass
+        :param blend_mode:
+                    pass
+        :param hover_layer_threshold:
+                    pass
         :param use_utc: 
+                    Whether to use UTC in display.The default value of useUTC is false.
+                    true: When axis.type is 'time', ticks is determined according to UTC, 
+                          and axisLabel and tooltip use UTC by default.
+                    false: When axis.type is 'time', ticks is determined according to local time, 
+                           and axisLabel and tooltip use local time by default.
         """
 
         if not name:
@@ -137,8 +167,8 @@ class BaseChart(object):
         self.graphic = Graphic()
         self.calendar = Calendar()
         self.series = Series()
-        self.color = ''
-        self.backgroundColor = ''
+        self.color = color
+        self.backgroundColor = background_color
         self.textStyle = TextStyle()
 
         self.animation = animation
@@ -175,30 +205,16 @@ class BaseChart(object):
                     _option[field] = obj
         return _option
 
-    def render(self):
-        """ Render Chart """
+    def render_to_web(self):
+        """ Render Chart To Web """
 
-        return self.RENDER_HTML.format(render_id=self._render_id, width=self._width,
-                                       height=self._height, name=self._name, option=self.option)
+        return RENDER_TO_WEB.format(render_id=self._render_id, width=self._width,
+                                    height=self._height, name=self._name, option=self.option)
 
     def __str__(self):
         return '%s' % self.option
 
 
 if __name__ == '__main__':
-    a = BaseChart('Test', subtitle='1234', render_id='test1', toolbox=True)
-    a.title.show = False
-    a.title.textStyle.color = 'test'
-    a.grid.tooltip.textStyle.fontSize = 12
-    a.grid.tooltip.axisPointer.crossStyle.opacity = 1
-    a.xAxis.axisLabel.textStyle.set_keys(color='black')
-    a.toolbox.feature.dataZoom.iconStyle.normal.color = 'test color'
-    a.textStyle.set_keys()
-    a.dataZoom.append(Slider())
-    b = Continuous()
-    b.controller.inRange.set_keys(symbol_size=[1, 3])
-    a.visualMap.append(b)
-    d = Region()
-    d.itemStyle.normal.color = 'test'
-    a.geo.regions.append(d)
+    a = BaseChart('Test', subtitle='1234', render_id='test1')
     print(a)
