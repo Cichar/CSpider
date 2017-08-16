@@ -19,6 +19,8 @@ Spider with Web UI
 * Cecharts
 
   This Module Is Used To Pass The Rendered EChart Object To The Web. Maybe This Module Will Split From CSpider To Be Alone As A Library.
+  
+  2017.8.16: This Module Is Splits To [Cecharts](https://github.com/Cichar/Cecharts)
 
 ### Task Status Monitor
 ![image](https://github.com/Cichar/CSpider/blob/master/screenshots/task_update.png)
