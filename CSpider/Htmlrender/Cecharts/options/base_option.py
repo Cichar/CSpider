@@ -816,6 +816,17 @@ class ItemStyle2(BaseOption):
         pass
 
 
+class ItemStyle3(BaseOption):
+    """ This Class Is For Calendar """
+
+    def __init__(self):
+        self.normal = Emphasis()
+
+    @check_args
+    def set_keys(self, *args, **kwargs):
+        pass
+
+
 class Emphasis(BaseOption):
     """ This Class Is For IconStyle """
 
@@ -1371,3 +1382,64 @@ class GraphicBezierCurveShape(GraphicLineShape):
         self.cpy1 = cpy1
         self.cpx2 = cpx2
         self.cpy2 = cpy2
+
+
+class DayLabel(BaseOption):
+    """ This Class Is For Calendar """
+
+    def __init__(self):
+        self.show = None
+        self.firstDay = None
+        self.margin = None
+        self.position = None
+        self.nameMap = None
+        self.textStyle = TextStyle()
+
+    @check_args
+    def set_keys(self, show: bool=None, first_day: int=None, margin: int=None, position: str=None, name_map=None):
+        self.show = show
+        self.firstDay = first_day
+        self.margin = margin
+        self.position = position
+        self.nameMap = name_map
+
+
+class MonthLabel(BaseOption):
+    """ This Class Is For Calendar """
+
+    def __init__(self):
+        self.show = None
+        self.align = None
+        self.margin = None
+        self.position = None
+        self.nameMap = None
+        self.formatter = None
+        self.textStyle = TextStyle()
+
+    @check_args
+    def set_keys(self, show: bool=None, align: str=None, margin: int=None, position: str=None,
+                 name_map=None, formatter=None):
+        self.show = show
+        self.align = align
+        self.margin = margin
+        self.position = position
+        self.nameMap = name_map
+        self.formatter = formatter
+
+
+class YearLabel(BaseOption):
+    """ This Class Is For Calendar """
+
+    def __init__(self):
+        self.show = None
+        self.margin = None
+        self.position = None
+        self.formatter = None
+        self.textStyle = TextStyle()
+
+    @check_args
+    def set_keys(self, show: bool=None, margin: int=None, position: str=None, formatter=None):
+        self.show = show
+        self.margin = margin
+        self.position = position
+        self.formatter = formatter
